@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة حضيرة الإعلام الآلي</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .sidebar {
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 15px 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar a:hover {
+            background-color: var(--secondary);
+        }
+        
+        .sidebar a.active {
+            background-color: var(--secondary);
+            border-right: 4px solid var(--accent);
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 20px;
+        }
+        
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .device-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-working {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-maintenance {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-broken {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--dark);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--dark);
+        }
+        
+        .table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- الشريط الجانبي -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <h3 class="text-center mb-4">نظام الإدارة</h3>
+                <div class="list-group">
+                    <a href="#" class="active"><i class="bi bi-house-door me-2"></i> الرئيسية</a>
+                    <a href="#"><i class="bi bi-pc me-2"></i> إدارة الأجهزة</a>
+                    <a href="#"><i class="bi bi-distribute-vertical me-2"></i> توزيع الأجهزة</a>
+                    <a href="#"><i class="bi bi-tools me-2"></i> إدارة الأعطال</a>
+                    <a href="#"><i class="bi bi-printer me-2"></i> حالة الطابعات</a>
+                    <a href="#"><i class="bi bi-people me-2"></i> حسابات المستخدمين</a>
+                    <a href="#"><i class="bi bi-clipboard-data me-2"></i> التقارير</a>
+                    <a href="#"><i class="bi bi-gear me-2"></i> الإعدادات</a>
+                </div>
+            </div>
+
+            <!-- المحتوى الرئيسي -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>لوحة تحكم إدارة الحضيرة</h2>
+                    <div>
+                        <button class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> إضافة جهاز</button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-download me-1"></i> تصدير تقرير</button>
+                    </div>
+                </div>
+
+                <!-- إحصائيات سريعة -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="stats-number">142</div>
+                            <div class="stats-title">عدد الأجهزة</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="stats-number">8</div>
+                            <div class="stats-title">أجهزة تحت الصيانة</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="stats-number">3</div>
+                            <div class="stats-title">طابعات تحتاج حبر</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="stats-number">25</div>
+                            <div class="stats-title">المستخدمين النشطين</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- محتوى متعدد التبويبات -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#devices">الأجهزة</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#distribution">التوزيع</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#maintenance">الصيانة</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href#printers>الطابعات</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <!-- تبويب الأجهزة -->
+                            <div class="tab-pane fade show active" id="devices">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5>قائمة الأجهزة</h5>
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control me-2" placeholder="بحث...">
+                                        <select class="form-select me-2">
+                                            <option>جميع الأنواع</option>
+                                            <option>حاسوب</option>
+                                            <option>شاشة</option>
+                                            <option>طابعة</option>
+                                            <option>شبكة</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>النوع</th>
+                                                <th>الرقم التسلسلي</th>
+                                                <th>الموقع</th>
+                                                <th>المستخدم</th>
+                                                <th>عنوان IP</th>
+                                                <th>الحالة</th>
+                                                <th>الإجراءات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><i class="bi bi-pc-display"></i> حاسوب</td>
+                                                <td>PC-2023-001</td>
+                                                <td>الطابق الأول - الغرفة 101</td>
+                                                <td>أحمد محمد</td>
+                                                <td>192.168.1.101</td>
+                                                <td><span class="device-status status-working">يعمل</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="bi bi-printer"></i> طابعة</td>
+                                                <td>PR-2023-015</td>
+                                                <td>الطابق الثاني - المطبخ</td>
+                                                <td>مشترك</td>
+                                                <td>192.168.1.215</td>
+                                                <td><span class="device-status status-maintenance">تحت الصيانة</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="bi bi-display"></i> شاشة</td>
+                                                <td>MN-2023-078</td>
+                                                <td>الطابق الثالث - الغرفة 302</td>
+                                                <td>فاطمة الزهراء</td>
+                                                <td>—</td>
+                                                <td><span class="device-status status-working">يعمل</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="bi bi-router"></i> جهاز توجيه</td>
+                                                <td>RT-2023-005</td>
+                                                <td>غرفة الخوادم</td>
+                                                <td>—</td>
+                                                <td>192.168.0.1</td>
+                                                <td><span class="device-status status-broken">عطل</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- تبويب التوزيع -->
+                            <div class="tab-pane fade" id="distribution">
+                                <h5>توزيع الأجهزة على المستخدمين</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-success text-white">
+                                                <i class="bi bi-person-check me-2"></i> توزيع جديد
+                                            </div>
+                                            <div class="card-body">
+                                                <form>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">المستخدم</label>
+                                                        <select class="form-select">
+                                                            <option selected>اختر مستخدم...</option>
+                                                            <option>أحمد محمد</option>
+                                                            <option>فاطمة الزهراء</option>
+                                                            <option>علي حسين</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">الجهاز</label>
+                                                        <select class="form-select">
+                                                            <option selected>اختر جهاز...</option>
+                                                            <option>PC-2023-001 - حاسوب</option>
+                                                            <option>MN-2023-078 - شاشة</option>
+                                                            <option>PR-2023-015 - طابعة</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">تاريخ التوزيع</label>
+                                                        <input type="date" class="form-control">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">حفظ التوزيع</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-info text-white">
+                                                <i class="bi bi-list-check me-2"></i> آخر التوزيعات
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="list-group">
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">حاسوب PC-2023-012</h6>
+                                                            <small>منذ 3 أيام</small>
+                                                        </div>
+                                                        <p class="mb-1">تم تخصيصه لمحمد أحمد</p>
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">شاشة MN-2023-045</h6>
+                                                            <small>منذ 5 أيام</small>
+                                                        </div>
+                                                        <p class="mb-1">تم تخصيصها لسارة خالد</p>
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">طابعة PR-2023-008</h6>
+                                                            <small>منذ أسبوع</small>
+                                                        </div>
+                                                        <p class="mb-1">تم تخصيصها لقسم المحاسبة</p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تبويب الصيانة -->
+                            <div class="tab-pane fade" id="maintenance">
+                                <h5>إدارة الأعطال والصيانة</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-warning text-dark">
+                                                <i class="bi bi-exclamation-triangle me-2"></i> تسجيل عطل جديد
+                                            </div>
+                                            <div class="card-body">
+                                                <form>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">الجهاز</label>
+                                                        <select class="form-select">
+                                                            <option selected>اختر جهاز...</option>
+                                                            <option>PC-2023-001 - حاسوب</option>
+                                                            <option>MN-2023-078 - شاشة</option>
+                                                            <option>PR-2023-015 - طابعة</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">نوع العطل</label>
+                                                        <select class="form-select">
+                                                            <option selected>اختر نوع العطل...</option>
+                                                            <option>عطل hardware</option>
+                                                            <option>عطل software</option>
+                                                            <option>عطل شبكي</option>
+                                                            <option>عطل كهربائي</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">وصف العطل</label>
+                                                        <textarea class="form-control" rows="3"></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">تسجيل العطل</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-danger text-white">
+                                                <i class="bi bi-tools me-2"></i> طلبات الصيانة الحالية
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="list-group">
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">جهاز التوجيه RT-2023-005</h6>
+                                                            <span class="badge bg-danger">عاجل</span>
+                                                        </div>
+                                                        <p class="mb-1">انقطع الاتصال بالشبكة</p>
+                                                        <small>تم التسجيل: 2023-10-15</small>
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">طابعة PR-2023-015</h6>
+                                                            <span class="badge bg-warning">قيد المعالجة</span>
+                                                        </div>
+                                                        <p class="mb-1">مشكلة في تغذية الورق</p>
+                                                        <small>تم التسجيل: 2023-10-12</small>
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">حاسوب PC-2023-021</h6>
+                                                            <span class="badge bg-success">تم الإصلاح</span>
+                                                        </div>
+                                                        <p class="mb-1">استبدال ذاكرة RAM</p>
+                                                        <small>تم التسجيل: 2023-10-05</small>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تبويب الطابعات -->
+                            <div class="tab-pane fade" id="printers">
+                                <h5>متابعة حالة الطابعات والتزويد</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-header bg-primary text-white">
+                                                <i class="bi bi-printer me-2"></i> حالة الطابعات
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>الطابعة</th>
+                                                                <th>الرقم التسلسلي</th>
+                                                                <th>المكان</th>
+                                                                <th>نسبة الحبر</th>
+                                                                <th>حالة التونر</th>
+                                                                <th>الحالة</th>
+                                                                <th>الإجراء</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>طابعة ليزر أبيض وأسود</td>
+                                                                <td>PR-2023-008</td>
+                                                                <td>قسم المحاسبة</td>
+                                                                <td>
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar" role="progressbar" style="width: 15%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">15%</div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-warning text-dark">منخفض</span>
+                                                                </td>
+                                                                <td><span class="device-status status-working">تعمل</span></td>
+                                                                <td><button class="btn btn-sm btn-warning">طلب تزويد</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>طابعة ليزر ملونة</td>
+                                                                <td>PR-2023-015</td>
+                                                                <td>قسم التسويق</td>
+                                                                <td>
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-success">جيد</span>
+                                                                </td>
+                                                                <td><span class="device-status status-maintenance">تحت الصيانة</span></td>
+                                                                <td><button class="btn btn-sm btn-secondary" disabled>قيد الإصلاح</button></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>طابعة متعددة الوظائف</td>
+                                                                <td>PR-2023-023</td>
+                                                                <td>الإدارة</td>
+                                                                <td>
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 5%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">5%</div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-danger">منتهي</span>
+                                                                </td>
+                                                                <td><span class="device-status status-working">تعمل</span></td>
+                                                                <td><button class="btn btn-sm btn-danger">تزويد عاجل</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // كود جافاسكريبت لإدارة الحالة الديناميكية للصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تفعيل تبويبات Bootstrap
+            const triggerTabList = [].slice.call(document.querySelectorAll('.nav-tabs a'))
+            triggerTabList.forEach(function (triggerEl) {
+                new bootstrap.Tab(triggerEl)
+            })
+            
+            // هنا يمكن إضافة المزيد من الوظائف التفاعلية
+            console.log('تم تحميل نظام إدارة الحضيرة بنجاح');
+        });
+    </script>
+</body>
+</html>
