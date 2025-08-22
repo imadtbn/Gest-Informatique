@@ -84,12 +84,38 @@
             overflow-y: auto;
             width: 250px;
             z-index: 1020;
+            transition: all 0.3s;
+        }
+        
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+        
+        .sidebar-toggle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
         
         .sidebar a {
             color: white;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
             padding: 12px 20px;
             transition: all 0.3s;
             border-right: 4px solid transparent;
@@ -104,9 +130,21 @@
             border-right: 4px solid var(--accent);
         }
         
+        .sidebar a i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+            min-width: 24px;
+            text-align: center;
+        }
+        
         .main-content {
             margin-right: 250px;
             padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .main-content.expanded {
+            margin-right: 70px;
         }
         
         .card {
@@ -167,6 +205,12 @@
             color: #721c24;
         }
         
+        .nav-tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        
         .nav-tabs .nav-link.active {
             background-color: var(--primary);
             color: white;
@@ -175,6 +219,7 @@
         
         .nav-tabs .nav-link {
             color: var(--dark);
+            white-space: nowrap;
         }
         
         .btn-primary {
@@ -249,18 +294,27 @@
         
         @media (max-width: 992px) {
             .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                top: 0;
+                width: 70px;
+            }
+            
+            .sidebar .menu-text {
+                display: none;
             }
             
             .main-content {
-                margin-right: 0;
+                margin-right: 70px;
             }
             
             body {
                 padding-top: 140px; /* هيدر أكبر للشاشات الصغيرة */
+            }
+            
+            .main-header {
+                padding: 10px 0;
+            }
+            
+            .header-title {
+                font-size: 1.5rem;
             }
         }
         
@@ -376,6 +430,43 @@
             margin-bottom: 0;
             padding-bottom: 0;
         }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+        
+        .section-title {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        /* تحسينات للتبويبات */
+        .nav-tabs-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        /* تحسينات للاستجابة */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.2rem;
+            }
+            
+            .header-actions .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.875rem;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -403,19 +494,55 @@
     <div class="container-fluid">
         <div class="row">
             <!-- الشريط الجانبي -->
-            <div class="col-md-3 col-lg-2 sidebar">
+            <div class="col-md-3 col-lg-2 sidebar" id="sidebar">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
                 <div class="list-group">
-                    <a href="#" class="active"><i class="bi bi-house-door me-2"></i> الرئيسية</a>
-                    <a href="#"><i class="bi bi-pc me-2"></i> إدارة الأجهزة</a>
-                    <a href="#"><i class="bi bi-person me-2"></i> إدارة المستخدمين</a>
-                    <a href="#"><i class="bi bi-distribute-vertical me-2"></i> توزيع الأجهزة</a>
-                    <a href="#"><i class="bi bi-tools me-2"></i> إدارة الأعطال</a>
-                    <a href="#"><i class="bi bi-printer me-2"></i> حالة الطابعات</a>
-                    <a href="#"><i class="bi bi-file-text me-2"></i> وثائق C12</a>
-                    <a href="#"><i class="bi bi-wrench me-2"></i> وثائق الصيانة</a>
-                    <a href="#"><i class="bi bi-clipboard-data me-2"></i> التقارير</a>
-                    <a href="#"><i class="bi bi-database me-2"></i> النسخ الاحتياطي</a>
-                    <a href="#"><i class="bi bi-gear me-2"></i> الإعدادات</a>
+                    <a href="#" class="active" data-tab="home">
+                        <i class="bi bi-house-door"></i>
+                        <span class="menu-text">الرئيسية</span>
+                    </a>
+                    <a href="#" data-tab="devices">
+                        <i class="bi bi-pc"></i>
+                        <span class="menu-text">إدارة الأجهزة</span>
+                    </a>
+                    <a href="#" data-tab="users">
+                        <i class="bi bi-person"></i>
+                        <span class="menu-text">إدارة المستخدمين</span>
+                    </a>
+                    <a href="#" data-tab="distribution">
+                        <i class="bi bi-distribute-vertical"></i>
+                        <span class="menu-text">توزيع الأجهزة</span>
+                    </a>
+                    <a href="#" data-tab="maintenance">
+                        <i class="bi bi-tools"></i>
+                        <span class="menu-text">إدارة الأعطال</span>
+                    </a>
+                    <a href="#" data-tab="printers">
+                        <i class="bi bi-printer"></i>
+                        <span class="menu-text">حالة الطابعات</span>
+                    </a>
+                    <a href="#" data-tab="documents">
+                        <i class="bi bi-file-text"></i>
+                        <span class="menu-text">وثائق C12</span>
+                    </a>
+                    <a href="#" data-tab="repair-docs">
+                        <i class="bi bi-wrench"></i>
+                        <span class="menu-text">وثائق الصيانة</span>
+                    </a>
+                    <a href="#" data-tab="reports">
+                        <i class="bi bi-clipboard-data"></i>
+                        <span class="menu-text">التقارير</span>
+                    </a>
+                    <a href="#" data-tab="backup">
+                        <i class="bi bi-database"></i>
+                        <span class="menu-text">النسخ الاحتياطي</span>
+                    </a>
+                    <a href="#" data-tab="settings">
+                        <i class="bi bi-gear"></i>
+                        <span class="menu-text">الإعدادات</span>
+                    </a>
                 </div>
                 
                 <div class="mt-4 p-3" style="background-color: rgba(0,0,0,0.2); border-radius: 10px;">
@@ -434,7 +561,7 @@
             </div>
 
             <!-- المحتوى الرئيسي -->
-            <div class="col-md-9 col-lg-10 main-content">
+            <div class="col-md-9 col-lg-10 main-content" id="mainContent">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>لوحة تحكم إدارة الحضيرة</h2>
                     <div>
@@ -610,8 +737,251 @@
                                 </div>
                             </div>
 
-                            <!-- بقية التبويبات (نفس المحتوى السابق) -->
-                            <!-- ... -->
+                            <!-- تبويب التوزيع -->
+                            <div class="tab-pane fade" id="distribution">
+                                <h5 class="section-title">توزيع الأجهزة على المستخدمين</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-success text-white">
+                                                <i class="bi bi-person-check me-2"></i> توزيع جديد
+                                            </div>
+                                            <div class="card-body">
+                                                <form id="distributionForm">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">المستخدم</label>
+                                                        <select class="form-select" id="userSelect" required>
+                                                            <option value="" selected disabled>اختر مستخدم...</option>
+                                                            <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">الجهاز</label>
+                                                        <select class="form-select" id="deviceSelect" required>
+                                                            <option value="" selected disabled>اختر جهاز...</option>
+                                                            <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">تاريخ التوزيع</label>
+                                                        <input type="date" class="form-control" id="distributionDate" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">ملاحظات</label>
+                                                        <textarea class="form-control" id="distributionNotes" rows="2"></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">حفظ التوزيع</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-info text-white">
+                                                <i class="bi bi-list-check me-2"></i> آخر التوزيعات
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="list-group" id="distributionList">
+                                                    <!-- سيتم ملء هذه القائمة بواسطة JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تبويب الصيانة -->
+                            <div class="tab-pane fade" id="maintenance">
+                                <h5 class="section-title">إدارة الأعطال والصيانة</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-warning text-dark">
+                                                <i class="bi bi-exclamation-triangle me-2"></i> تسجيل عطل جديد
+                                            </div>
+                                            <div class="card-body">
+                                                <form id="maintenanceForm">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">الجهاز</label>
+                                                        <select class="form-select" id="maintenanceDeviceSelect" required>
+                                                            <option value="" selected disabled>اختر جهاز...</option>
+                                                            <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">نوع العطل</label>
+                                                        <select class="form-select" id="issueType" required>
+                                                            <option value="" selected disabled>اختر نوع العطل...</option>
+                                                            <option>عطل hardware</option>
+                                                            <option>عطل software</option>
+                                                            <option>عطل شبكي</option>
+                                                            <option>عطل كهربائي</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">وصف العطل</label>
+                                                        <textarea class="form-control" id="issueDescription" rows="3"></textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">تاريخ الإبلاغ</label>
+                                                        <input type="date" class="form-control" id="issueDate" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">تسجيل العطل</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-danger text-white">
+                                                <i class="bi bi-tools me-2"></i> طلبات الصيانة الحالية
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="list-group" id="maintenanceList">
+                                                    <!-- سيتم ملء هذه القائمة بواسطة JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تبويب الطابعات -->
+                            <div class="tab-pane fade" id="printers">
+                                <h5 class="section-title">متابعة حالة الطابعات والتزويد</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-header bg-primary text-white">
+                                                <i class="bi bi-printer me-2"></i> حالة الطابعات
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped" id="printersTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>الطابعة</th>
+                                                                <th>الرقم التسلسلي</th>
+                                                                <th>المكان</th>
+                                                                <th>نسبة الحبر</th>
+                                                                <th>حالة التونر</th>
+                                                                <th>عنوان IP</th>
+                                                                <th>عنوان MAC</th>
+                                                                <th>الحالة</th>
+                                                                <th>الإجراء</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- سيتم ملء هذا الجدول بواسطة JavaScript -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تبويب الوثائق -->
+                            <div class="tab-pane fade" id="documents">
+                                <h5 class="section-title">إدارة الوثائق</h5>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#c12InModal">
+                                            <i class="bi bi-box-arrow-in-down me-1"></i> وثيقة دخول C12
+                                        </button>
+                                        <button class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#c12OutModal">
+                                            <i class="bi bi-box-arrow-up me-1"></i> وثيقة خروج C12
+                                        </button>
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#repairModal">
+                                            <i class="bi bi-tools me-1"></i> وثيقة تصليح C7
+                                        </button>
+                                    </div>
+                                    <div class="d-flex">
+                                        <input type="text" class="form-control me-2" placeholder="بحث في الوثائق..." id="searchDocuments">
+                                        <select class="form-select" id="documentTypeFilter">
+                                            <option value="">جميع الوثائق</option>
+                                            <option value="دخول">C12 دخول</option>
+                                            <option value="خروج">C12 خروج</option>
+                                            <option value="تصليح">وثيقة تصليح C7</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="documentsContainer">
+                                    <!-- سيتم ملء هذه المنطقة بواسطة JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- تبويب التقارير -->
+                            <div class="tab-pane fade" id="reports">
+                                <h5 class="section-title">التقارير الشهرية</h5>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-info text-white">
+                                                <i class="bi bi-graph-up me-2"></i> تقرير حالة العتاد
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">اختر الشهر</label>
+                                                    <input type="month" class="form-control" value="2023-10" id="hardwareReportMonth">
+                                                </div>
+                                                <div class="list-group">
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        الأجهزة العاملة
+                                                        <span class="badge bg-primary rounded-pill">34</span>
+                                                    </div>
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        الأجهزة المعطلة
+                                                        <span class="badge bg-danger rounded-pill">5</span>
+                                                    </div>
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        الأجهزة قيد الصيانة
+                                                        <span class="badge bg-warning rounded-pill">3</span>
+                                                    </div>
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        الأجهزة المقترحة للصرف
+                                                        <span class="badge bg-secondary rounded-pill">2</span>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-outline-primary mt-3 w-100">تصدير التقرير</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-success text-white">
+                                                <i class="bi bi-people me-2"></i> تقرير المستخدمين
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">اختر الشهر</label>
+                                                    <input type="month" class="form-control" value="2023-10" id="usersReportMonth">
+                                                </div>
+                                                <div class="list-group">
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        المستخدمين النشطين
+                                                        <span class="badge bg-success rounded-pill">28</span>
+                                                    </div>
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        المستخدمين الجدد
+                                                        <span class="badge bg-info rounded-pill">4</span>
+                                                    </div>
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        أجهزة تم توزيعها
+                                                        <span class="badge bg-primary rounded-pill">12</span>
+                                                    </div>
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        أجهزة تم استرجاعها
+                                                        <span class="badge bg-warning rounded-pill">2</span>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-outline-success mt-3 w-100">تصدير التقرير</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -971,6 +1341,46 @@
             populateUserSelect();
             populateDeviceSelect();
             
+            // إضافة مستمعي الأحداث للقائمة الجانبية
+            document.querySelectorAll('.sidebar a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // إزالة النشط من جميع العناصر
+                    document.querySelectorAll('.sidebar a').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // إضافة النشط للعنصر الحالي
+                    this.classList.add('active');
+                    
+                    // عرض المحتوى المناسب
+                    const tab = this.getAttribute('data-tab');
+                    if (tab) {
+                        showTab(tab);
+                    }
+                });
+            });
+            
+            // تفعيل زر toggle الشريط الجانبي
+            document.getElementById('sidebarToggle').addEventListener('click', function() {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+                
+                // تغيير الأيقونة
+                const icon = this.querySelector('i');
+                if (sidebar.classList.contains('collapsed')) {
+                    icon.classList.remove('bi-chevron-right');
+                    icon.classList.add('bi-chevron-left');
+                } else {
+                    icon.classList.remove('bi-chevron-left');
+                    icon.classList.add('bi-chevron-right');
+                }
+            });
+            
             // إضافة مستمعي الأحداث
             document.getElementById('searchDevices').addEventListener('keyup', filterDevicesTable);
             document.getElementById('deviceTypeFilter').addEventListener('change', filterDevicesTable);
@@ -997,6 +1407,17 @@
                     const deviceId = e.target.closest('tr').dataset.id;
                     deleteDevice(deviceId);
                 }
+            });
+            
+            // تفعيل نماذج التوزيع والصيانة
+            document.getElementById('distributionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addDistribution();
+            });
+            
+            document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addMaintenance();
             });
             
             console.log('تم تحميل نظام إدارة الحضيرة بنجاح');
@@ -1125,6 +1546,17 @@
                 option.textContent = `${device.name} (${device.serial})`;
                 select.appendChild(option);
             });
+            
+            // أيضًا تعبئة قائمة أجهزة الصيانة
+            const maintenanceSelect = document.getElementById('maintenanceDeviceSelect');
+            maintenanceSelect.innerHTML = '<option value="" selected disabled>اختر جهاز...</option>';
+            
+            data.devices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.id;
+                option.textContent = `${device.name} (${device.serial})`;
+                maintenanceSelect.appendChild(option);
+            });
         }
 
         // وظائف المساعدة
@@ -1145,8 +1577,37 @@
         function showTab(tabId) {
             const tabTrigger = document.querySelector(`#mainTabs a[href="#${tabId}"]`);
             if (tabTrigger) {
-                new bootstrap.Tab(tabTrigger).show();
+                // تفعيل تبويب Bootstrap
+                const tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+                
+                // إذا كان التبويب غير موجود في الشريط الرئيسي، نضيفه
+                const existingTab = document.querySelector(`#mainTabs a[href="#${tabId}"]`);
+                if (!existingTab) {
+                    // إضافة تبويب جديد
+                    const li = document.createElement('li');
+                    li.className = 'nav-item';
+                    li.innerHTML = `<a class="nav-link" data-bs-toggle="tab" href="#${tabId}">${getTabName(tabId)}</a>`;
+                    document.getElementById('mainTabs').appendChild(li);
+                }
             }
+        }
+
+        function getTabName(tabId) {
+            const names = {
+                'home': 'الرئيسية',
+                'devices': 'الأجهزة',
+                'users': 'المستخدمين',
+                'distribution': 'التوزيع',
+                'maintenance': 'الصيانة',
+                'printers': 'الطابعات',
+                'documents': 'الوثائق',
+                'repair-docs': 'وثائق الصيانة',
+                'reports': 'التقارير',
+                'backup': 'النسخ الاحتياطي',
+                'settings': 'الإعدادات'
+            };
+            return names[tabId] || tabId;
         }
 
         // وظائف الفلترة والبحث
@@ -1277,6 +1738,7 @@
             
             // إعادة تعبئة الجداول
             populateDevicesTable();
+            populateDeviceSelect();
             
             // إغلاق النموذج
             bootstrap.Modal.getInstance(document.getElementById('addDeviceModal')).hide();
@@ -1311,6 +1773,76 @@
             
             // إظهار رسالة نجاح
             alert('تم إضافة المستخدم بنجاح!');
+        }
+
+        function addDistribution() {
+            const userId = parseInt(document.getElementById('userSelect').value);
+            const deviceId = parseInt(document.getElementById('deviceSelect').value);
+            const date = document.getElementById('distributionDate').value;
+            const notes = document.getElementById('distributionNotes').value;
+            
+            const data = getData();
+            const user = data.users.find(u => u.id === userId);
+            const device = data.devices.find(d => d.id === deviceId);
+            
+            if (user && device) {
+                const newDistribution = {
+                    id: Math.max(0, ...data.distributions.map(d => d.id)) + 1,
+                    deviceId, userId, date, notes
+                };
+                
+                // تحديث المستخدم في الجهاز
+                device.user = user.fullName;
+                
+                data.distributions.push(newDistribution);
+                saveData(data);
+                
+                // إعادة تعبئة القوائم
+                populateDistributionList();
+                populateDevicesTable();
+                
+                // إعادة تعيين النموذج
+                document.getElementById('distributionForm').reset();
+                document.getElementById('distributionDate').value = new Date().toISOString().split('T')[0];
+                
+                // إظهار رسالة نجاح
+                alert('تم توزيع الجهاز بنجاح!');
+            }
+        }
+
+        function addMaintenance() {
+            const deviceId = parseInt(document.getElementById('maintenanceDeviceSelect').value);
+            const type = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value;
+            const date = document.getElementById('issueDate').value;
+            
+            const data = getData();
+            const device = data.devices.find(d => d.id === deviceId);
+            
+            if (device) {
+                const newMaintenance = {
+                    id: Math.max(0, ...data.maintenances.map(m => m.id)) + 1,
+                    deviceId, type, description, date,
+                    status: 'قيد المعالجة'
+                };
+                
+                // تحديث حالة الجهاز
+                device.status = 'صيانة';
+                
+                data.maintenances.push(newMaintenance);
+                saveData(data);
+                
+                // إعادة تعبئة القوائم
+                populateMaintenanceList();
+                populateDevicesTable();
+                
+                // إعادة تعيين النموذج
+                document.getElementById('maintenanceForm').reset();
+                document.getElementById('issueDate').value = new Date().toISOString().split('T')[0];
+                
+                // إظهار رسالة نجاح
+                alert('تم تسجيل العطل بنجاح!');
+            }
         }
 
         // وظائف الأزرار
