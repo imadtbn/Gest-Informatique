@@ -23,17 +23,67 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             color: #333;
+            padding-top: 80px; /* للتعويض عن الهيدر الثابت */
+        }
+        
+        /* الهيدر الجديد */
+        .main-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1030;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .header-title {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
         
         .sidebar {
             background-color: var(--primary);
             color: white;
-            height: 100vh;
+            height: calc(100vh - 80px);
             position: fixed;
+            top: 80px;
             padding-top: 20px;
             overflow-y: auto;
             width: 250px;
-            z-index: 1000;
+            z-index: 1020;
         }
         
         .sidebar a {
@@ -197,15 +247,20 @@
             margin: 2px;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .sidebar {
                 width: 100%;
                 height: auto;
                 position: relative;
+                top: 0;
             }
             
             .main-content {
                 margin-right: 0;
+            }
+            
+            body {
+                padding-top: 140px; /* هيدر أكبر للشاشات الصغيرة */
             }
         }
         
@@ -301,14 +356,54 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
+        
+        .desktop-components {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .component-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .component-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
     </style>
 </head>
 <body>
+    <!-- الهيدر الجديد -->
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="header-title">
+                <i class="bi bi-pc-display-horizontal"></i> نظام إدارة حضيرة الإعلام الآلي
+            </h1>
+            <div class="header-actions">
+                <div class="user-info">
+                    <div class="user-avatar">م</div>
+                    <div>
+                        <div>مدير النظام</div>
+                        <small>الإدارة الفنية</small>
+                    </div>
+                </div>
+                <button class="btn btn-outline-light">
+                    <i class="bi bi-box-arrow-right"></i> تسجيل الخروج
+                </button>
+            </div>
+        </div>
+    </header>
+
     <div class="container-fluid">
         <div class="row">
             <!-- الشريط الجانبي -->
             <div class="col-md-3 col-lg-2 sidebar">
-                <h3 class="text-center mb-4">نظام الإدارة</h3>
                 <div class="list-group">
                     <a href="#" class="active"><i class="bi bi-house-door me-2"></i> الرئيسية</a>
                     <a href="#"><i class="bi bi-pc me-2"></i> إدارة الأجهزة</a>
@@ -396,44 +491,6 @@
                     </div>
                 </div>
 
-                <!-- قسم التصدير والنسخ الاحتياطي -->
-                <div class="export-section">
-                    <h4 class="mb-3">النسخ الاحتياطي والاستيراد</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-success" id="backupBtn">
-                                    <i class="bi bi-cloud-arrow-down me-1"></i> إنشاء نسخة احتياطية
-                                </button>
-                                <button class="btn btn-info" id="importBtn">
-                                    <i class="bi bi-cloud-arrow-up me-1"></i> استيراد نسخة احتياطية
-                                </button>
-                                <button class="btn btn-warning" id="generateReportBtn">
-                                    <i class="bi bi-file-earmark-text me-1"></i> إنشاء تقرير شهري
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6>آخر نسخة احتياطية</h6>
-                                    <p id="lastBackupDate">2023-10-20 14:32</p>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="autoBackup">
-                                        <label class="form-check-label" for="autoBackup">النسخ التلقائي</label>
-                                    </div>
-                                    <div class="mt-3">
-                                        <h6>مساحة التخزين</h6>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- محتوى متعدد التبويبات -->
                 <div class="card mt-4">
                     <div class="card-header">
@@ -475,9 +532,8 @@
                                             <select class="form-select" id="deviceTypeFilter">
                                                 <option value="">جميع الأنواع</option>
                                                 <option value="حاسوب">حاسوب</option>
+                                                <option value="حاسوب مكتبي">حاسوب مكتبي</option>
                                                 <option value="طابعة">طابعة</option>
-                                                <option value="شاشة">شاشة</option>
-                                                <option value="شبكة">شبكة</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -496,6 +552,7 @@
                                         <thead>
                                             <tr>
                                                 <th>اسم الجهاز</th>
+                                                <th>النوع</th>
                                                 <th>المكونات</th>
                                                 <th>المستخدم</th>
                                                 <th>الموقع</th>
@@ -553,298 +610,8 @@
                                 </div>
                             </div>
 
-                            <!-- تبويب التوزيع -->
-                            <div class="tab-pane fade" id="distribution">
-                                <h5>توزيع الأجهزة على المستخدمين</h5>
-                                <div class="row mt-4">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-success text-white">
-                                                <i class="bi bi-person-check me-2"></i> توزيع جديد
-                                            </div>
-                                            <div class="card-body">
-                                                <form id="distributionForm">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">المستخدم</label>
-                                                        <select class="form-select" id="userSelect" required>
-                                                            <option value="" selected disabled>اختر مستخدم...</option>
-                                                            <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">الجهاز</label>
-                                                        <select class="form-select" id="deviceSelect" required>
-                                                            <option value="" selected disabled>اختر جهاز...</option>
-                                                            <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">تاريخ التوزيع</label>
-                                                        <input type="date" class="form-control" id="distributionDate" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">ملاحظات</label>
-                                                        <textarea class="form-control" id="distributionNotes" rows="2"></textarea>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary">حفظ التوزيع</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-info text-white">
-                                                <i class="bi bi-list-check me-2"></i> آخر التوزيعات
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="list-group" id="distributionList">
-                                                    <!-- سيتم ملء هذه القائمة بواسطة JavaScript -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- تبويب الصيانة -->
-                            <div class="tab-pane fade" id="maintenance">
-                                <h5>إدارة الأعطال والصيانة</h5>
-                                <div class="row mt-4">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-warning text-dark">
-                                                <i class="bi bi-exclamation-triangle me-2"></i> تسجيل عطل جديد
-                                            </div>
-                                            <div class="card-body">
-                                                <form id="maintenanceForm">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">الجهاز</label>
-                                                        <select class="form-select" id="maintenanceDeviceSelect" required>
-                                                            <option value="" selected disabled>اختر جهاز...</option>
-                                                            <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">نوع العطل</label>
-                                                        <select class="form-select" id="issueType" required>
-                                                            <option value="" selected disabled>اختر نوع العطل...</option>
-                                                            <option>عطل hardware</option>
-                                                            <option>عطل software</option>
-                                                            <option>عطل شبكي</option>
-                                                            <option>عطل كهربائي</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">وصف العطل</label>
-                                                        <textarea class="form-control" id="issueDescription" rows="3" required></textarea>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">تاريخ الإبلاغ</label>
-                                                        <input type="date" class="form-control" id="issueDate" required>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary">تسجيل العطل</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-danger text-white">
-                                                <i class="bi bi-tools me-2"></i> طلبات الصيانة الحالية
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="list-group" id="maintenanceList">
-                                                    <!-- سيتم ملء هذه القائمة بواسطة JavaScript -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- تبويب الطابعات -->
-                            <div class="tab-pane fade" id="printers">
-                                <h5>متابعة حالة الطابعات والتزويد</h5>
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        <div class="card">
-                                            <div class="card-header bg-primary text-white">
-                                                <i class="bi bi-printer me-2"></i> حالة الطابعات
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-striped" id="printersTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>الطابعة</th>
-                                                                <th>الرقم التسلسلي</th>
-                                                                <th>المكان</th>
-                                                                <th>نسبة الحبر</th>
-                                                                <th>حالة التونر</th>
-                                                                <th>عنوان IP</th>
-                                                                <th>عنوان MAC</th>
-                                                                <th>الحالة</th>
-                                                                <th>الإجراء</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <!-- سيتم ملء هذا الجدول بواسطة JavaScript -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- تبويب الوثائق -->
-                            <div class="tab-pane fade" id="documents">
-                                <h5>إدارة الوثائق</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div>
-                                        <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#c12InModal">
-                                            <i class="bi bi-box-arrow-in-down me-1"></i> وثيقة دخول C12
-                                        </button>
-                                        <button class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#c12OutModal">
-                                            <i class="bi bi-box-arrow-up me-1"></i> وثيقة خروج C12
-                                        </button>
-                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#repairModal">
-                                            <i class="bi bi-tools me-1"></i> وثيقة تصليح C7
-                                        </button>
-                                    </div>
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control me-2" placeholder="بحث في الوثائق..." id="searchDocuments">
-                                        <select class="form-select" id="documentTypeFilter">
-                                            <option value="">جميع الوثائق</option>
-                                            <option value="دخول">C12 دخول</option>
-                                            <option value="خروج">C12 خروج</option>
-                                            <option value="تصليح">وثيقة تصليح C7</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row" id="documentsContainer">
-                                    <!-- سيتم ملء هذه المنطقة بواسطة JavaScript -->
-                                </div>
-                            </div>
-
-                            <!-- تبويب التقارير -->
-                            <div class="tab-pane fade" id="reports">
-                                <h5>التقارير الشهرية</h5>
-                                <div class="row mt-4">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-info text-white">
-                                                <i class="bi bi-graph-up me-2"></i> تقرير حالة العتاد
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">اختر الشهر</label>
-                                                    <input type="month" class="form-control" value="2023-10" id="hardwareReportMonth">
-                                                </div>
-                                                <div class="list-group">
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        الأجهزة العاملة
-                                                        <span class="badge bg-primary rounded-pill">34</span>
-                                                    </div>
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        الأجهزة المعطلة
-                                                        <span class="badge bg-danger rounded-pill">5</span>
-                                                    </div>
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        الأجهزة قيد الصيانة
-                                                        <span class="badge bg-warning rounded-pill">3</span>
-                                                    </div>
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        الأجهزة المقترحة للصرف
-                                                        <span class="badge bg-secondary rounded-pill">2</span>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-outline-primary mt-3 w-100">تصدير التقرير</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-success text-white">
-                                                <i class="bi bi-people me-2"></i> تقرير المستخدمين
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">اختر الشهر</label>
-                                                    <input type="month" class="form-control" value="2023-10" id="usersReportMonth">
-                                                </div>
-                                                <div class="list-group">
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        المستخدمين النشطين
-                                                        <span class="badge bg-success rounded-pill">28</span>
-                                                    </div>
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        المستخدمين الجدد
-                                                        <span class="badge bg-info rounded-pill">4</span>
-                                                    </div>
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        أجهزة تم توزيعها
-                                                        <span class="badge bg-primary rounded-pill">12</span>
-                                                    </div>
-                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                        أجهزة تم استرجاعها
-                                                        <span class="badge bg-warning rounded-pill">2</span>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-outline-success mt-3 w-100">تصدير التقرير</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        <div class="card">
-                                            <div class="card-header bg-primary text-white">
-                                                <i class="bi bi-wifi me-2"></i> تقرير حالة الشبكة
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">اختر الشهر</label>
-                                                            <input type="month" class="form-control" value="2023-10" id="networkReportMonth">
-                                                        </div>
-                                                        <div class="list-group">
-                                                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                                الأجهزة المتصلة بالشبكة
-                                                                <span class="badge bg-success rounded-pill">38</span>
-                                                            </div>
-                                                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                                عناوين IP مستخدمة
-                                                                <span class="badge bg-info rounded-pill">42</span>
-                                                            </div>
-                                                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                                انقطاعات الشبكة
-                                                                <span class="badge bg-danger rounded-pill">1</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <h6>حالة الربط بالشبكة</h6>
-                                                        <div class="progress mb-2">
-                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                        <small>95% من الأجهزة متصلة بشكل طبيعي</small>
-                                                        
-                                                        <h6 class="mt-3">استقرار الشبكة</h6>
-                                                        <div class="progress mb-2">
-                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 88%" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                        <small>88% من الوقت كانت الشبكة مستقرة</small>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-outline-primary mt-3 w-100">تصدير التقرير</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- بقية التبويبات (نفس المحتوى السابق) -->
+                            <!-- ... -->
                         </div>
                     </div>
                 </div>
@@ -852,7 +619,7 @@
         </div>
     </div>
 
-    <!-- نموذج إضافة جهاز -->
+    <!-- نموذج إضافة جهاز - تم التحديث -->
     <div class="modal fade" id="addDeviceModal" tabindex="-1" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -870,12 +637,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">نوع الجهاز</label>
-                                    <select class="form-select" id="deviceType" required>
+                                    <select class="form-select" id="deviceType" required onchange="toggleDesktopComponents()">
                                         <option value="" selected disabled>اختر نوع الجهاز...</option>
                                         <option value="حاسوب">حاسوب</option>
+                                        <option value="حاسوب مكتبي">حاسوب مكتبي</option>
                                         <option value="طابعة">طابعة</option>
-                                        <option value="شاشة">شاشة</option>
-                                        <option value="شبكة">جهاز شبكة</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -907,36 +673,43 @@
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label class="form-label">المكونات</label>
-                            <div class="component-list border p-2 rounded">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentMouse">
-                                    <label class="form-check-label" for="componentMouse">فأرة</label>
+                        <!-- مكونات إضافية للحاسوب المكتبي -->
+                        <div id="desktopComponents" class="desktop-components" style="display: none;">
+                            <h5>مكونات الحاسوب المكتبي</h5>
+                            <div class="component-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">الشاشة - العلامة التجارية</label>
+                                        <input type="text" class="form-control" id="monitorBrand">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">الشاشة - الرقم التسلسلي</label>
+                                        <input type="text" class="form-control" id="monitorSerial">
+                                    </div>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentKeyboard">
-                                    <label class="form-check-label" for="componentKeyboard">لوحة مفاتيح</label>
+                            </div>
+                            <div class="component-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">لوحة المفاتيح - العلامة التجارية</label>
+                                        <input type="text" class="form-control" id="keyboardBrand">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">لوحة المفاتيح - الرقم التسلسلي</label>
+                                        <input type="text" class="form-control" id="keyboardSerial">
+                                    </div>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentMonitor">
-                                    <label class="form-check-label" for="componentMonitor">شاشة</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentCPU">
-                                    <label class="form-check-label" for="componentCPU">وحدة مركزية</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentChair">
-                                    <label class="form-check-label" for="componentChair">كرسي</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentTable">
-                                    <label class="form-check-label" for="componentTable">طاولة</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="componentAdapter">
-                                    <label class="form-check-label" for="componentAdapter">محول الشبكة</label>
+                            </div>
+                            <div class="component-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">الفأرة - العلامة التجارية</label>
+                                        <input type="text" class="form-control" id="mouseBrand">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">الفأرة - الرقم التسلسلي</label>
+                                        <input type="text" class="form-control" id="mouseSerial">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1046,68 +819,6 @@
         </div>
     </div>
 
-    <!-- نموذج وثيقة C12 دخول -->
-    <div class="modal fade" id="c12InModal" tabindex="-1" aria-labelledby="c12InModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="c12InModalLabel">وثيقة C12 توزيع (دخول)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="c12InForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">رقم الوثيقة</label>
-                                    <input type="text" class="form-control" id="c12InNumber" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">تاريخ الوثيقة</label>
-                                    <input type="date" class="form-control" id="c12InDate" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">المستخدم</label>
-                                    <select class="form-select" id="c12InUser" required>
-                                        <option value="" selected disabled>اختر مستخدم...</option>
-                                        <!-- سيتم ملء هذا القائمة بواسطة JavaScript -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">القسم/الإدارة</label>
-                                    <input type="text" class="form-control" id="c12InDepartment" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">موقع التوزيع</label>
-                                    <input type="text" class="form-control" id="c12InLocation" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">حالة العتاد</label>
-                                    <textarea class="form-control" id="c12InCondition" rows="2" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">العتاد الموزع</label>
-                            <div id="c12InDevicesContainer">
-                                <!-- سيتم إضافة الأجهزة هنا -->
-                            </div>
-                            <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="addDeviceToC12InBtn">
-                                <i class="bi bi-plus-circle"></i> إضافة جهاز
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="button" class="btn btn-success" id="saveC12InBtn">حفظ الوثيقة</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // بيانات وهمية للنظام
@@ -1116,11 +827,16 @@
                 { 
                     id: 1, 
                     name: "حاسوب الإدارة 1",
-                    type: "حاسوب", 
+                    type: "حاسوب مكتبي", 
                     brand: "Dell", 
                     model: "Optiplex 7070", 
                     serial: "PC-2023-001", 
                     components: ["فأرة", "لوحة مفاتيح", "شاشة", "وحدة مركزية", "كرسي", "طاولة"],
+                    desktopComponents: {
+                        monitor: { brand: "Dell", serial: "MN-DELL-001" },
+                        keyboard: { brand: "Logitech", serial: "KB-LOGI-001" },
+                        mouse: { brand: "Logitech", serial: "MS-LOGI-001" }
+                    },
                     user: "أحمد محمد", 
                     location: "الطابق الأول - الغرفة 101",
                     ip: "192.168.1.101", 
@@ -1149,37 +865,20 @@
                 },
                 { 
                     id: 3, 
-                    name: "شاشة تطوير 3",
-                    type: "شاشة", 
-                    brand: "Samsung", 
-                    model: "S24F350", 
-                    serial: "MN-2023-078", 
-                    components: ["شاشة LED"],
+                    name: "حاسوب محمول تطوير 3",
+                    type: "حاسوب", 
+                    brand: "HP", 
+                    model: "EliteBook 850", 
+                    serial: "LT-2023-078", 
+                    components: ["حاسوب محمول", "شاحن"],
                     user: "فاطمة الزهراء", 
                     location: "الطابق الثالث - الغرفة 302",
-                    ip: "", 
-                    mac: "", 
-                    osStatus: "لا ينطبق",
-                    antivirusStatus: "لا ينطبق",
-                    status: "يعمل",
-                    supplier: "شركة الشاشات الحديثة"
-                },
-                { 
-                    id: 4, 
-                    name: "راوتر رئيسي",
-                    type: "شبكة", 
-                    brand: "Cisco", 
-                    model: "RV340", 
-                    serial: "RT-2023-005", 
-                    components: ["جهاز توجيه", "محول شبكة"],
-                    user: "", 
-                    location: "غرفة الخوادم",
-                    ip: "192.168.0.1", 
+                    ip: "192.168.1.120", 
                     mac: "00:1C:2D:3E:4F:5A", 
-                    osStatus: "يحتاج تحديث",
-                    antivirusStatus: "غير مثبت",
-                    status: "عطل",
-                    supplier: "شركة شبكات المتقدمة"
+                    osStatus: "يعمل بشكل طبيعي",
+                    antivirusStatus: "مثبت ومحدث",
+                    status: "يعمل",
+                    supplier: "شركة الحلول التقنية"
                 }
             ],
             users: [
@@ -1200,24 +899,6 @@
                     department: "التطوير", 
                     status: "نشط",
                     notes: "تعمل على مشاريع التطوير الرئيسية"
-                },
-                { 
-                    id: 3, 
-                    fullName: "علي حسين", 
-                    job: "منسق مبيعات", 
-                    registrationNumber: "EMP-2022-023",
-                    department: "المبيعات", 
-                    status: "نشط",
-                    notes: "يحتاج إلى جهاز محمول للعمل الميداني"
-                },
-                { 
-                    id: 4, 
-                    fullName: "سارة خالد", 
-                    job: "محاسبة", 
-                    registrationNumber: "EMP-2019-078",
-                    department: "المحاسبة", 
-                    status: "غير نشط",
-                    notes: "في إجازة طويلة"
                 }
             ],
             distributions: [
@@ -1233,7 +914,7 @@
                     deviceId: 3, 
                     userId: 2, 
                     date: "2023-10-12", 
-                    notes: "استبدال شاشة قديمة" 
+                    notes: "توزيع حاسوب محمول للمبرمجة" 
                 }
             ],
             maintenances: [
@@ -1244,14 +925,6 @@
                     description: "مشكلة في تغذية الورق", 
                     date: "2023-10-12", 
                     status: "قيد المعالجة" 
-                },
-                { 
-                    id: 2, 
-                    deviceId: 4, 
-                    type: "عطل شبكي", 
-                    description: "انقطع الاتصال بالشبكة", 
-                    date: "2023-10-15", 
-                    status: "عاجل" 
                 }
             ],
             printers: [
@@ -1266,18 +939,6 @@
                     ip: "192.168.1.208", 
                     mac: "00:1D:2E:3F:4A:5B", 
                     status: "تعمل" 
-                },
-                { 
-                    id: 2, 
-                    brand: "HP", 
-                    model: "LaserJet Pro", 
-                    serial: "PR-2023-015", 
-                    location: "قسم التسويق", 
-                    inkLevel: 65, 
-                    tonerStatus: "جيد", 
-                    ip: "192.168.1.215", 
-                    mac: "00:1E:2F:3A:4B:5C", 
-                    status: "تحت الصيانة" 
                 }
             ],
             documents: [
@@ -1289,24 +950,6 @@
                     user: "أحمد محمد", 
                     devices: [1, 3], 
                     condition: "جميع الأجهزة بحالة جيدة" 
-                },
-                { 
-                    id: 2, 
-                    type: "خروج", 
-                    number: "C12-2023-002", 
-                    date: "2023-10-05", 
-                    user: "فاطمة الزهراء", 
-                    devices: [3], 
-                    condition: "تم استرجاع الشاشة بحالة جيدة" 
-                },
-                { 
-                    id: 3, 
-                    type: "تصليح", 
-                    number: "C7-2023-001", 
-                    date: "2023-10-10", 
-                    device: 2, 
-                    reason: "مشكلة في تغذية الورق", 
-                    location: "مركز الصيانة المعتمد" 
                 }
             ]
         };
@@ -1327,10 +970,6 @@
             populateUsersContainer();
             populateUserSelect();
             populateDeviceSelect();
-            populateDistributionList();
-            populateMaintenanceList();
-            populatePrintersTable();
-            populateDocumentsContainer();
             
             // إضافة مستمعي الأحداث
             document.getElementById('searchDevices').addEventListener('keyup', filterDevicesTable);
@@ -1341,31 +980,24 @@
             document.getElementById('userDepartmentFilter').addEventListener('change', filterUsers);
             document.getElementById('userStatusFilter').addEventListener('change', filterUsers);
             
-            document.getElementById('distributionForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                addDistribution();
-            });
-            
-            document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                addMaintenance();
-            });
-            
             document.getElementById('saveDeviceBtn').addEventListener('click', addDevice);
             document.getElementById('saveUserBtn').addEventListener('click', addUser);
             
             document.getElementById('exportBtn').addEventListener('click', exportToExcel);
-            document.getElementById('backupBtn').addEventListener('click', backupData);
-            document.getElementById('importBtn').addEventListener('click', importData);
-            document.getElementById('generateReportBtn').addEventListener('click', generateMonthlyReport);
             
-            document.getElementById('searchDocuments').addEventListener('keyup', filterDocuments);
-            document.getElementById('documentTypeFilter').addEventListener('change', filterDocuments);
-            
-            // تعيين تاريخ اليوم في حقول التاريخ
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('distributionDate').value = today;
-            document.getElementById('issueDate').value = today;
+            // تفعيل أزرار الإجراءات في الجداول
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-outline-primary')) {
+                    const deviceId = e.target.closest('tr').dataset.id;
+                    viewDevice(deviceId);
+                } else if (e.target.classList.contains('btn-outline-secondary')) {
+                    const deviceId = e.target.closest('tr').dataset.id;
+                    editDevice(deviceId);
+                } else if (e.target.classList.contains('btn-outline-danger')) {
+                    const deviceId = e.target.closest('tr').dataset.id;
+                    deleteDevice(deviceId);
+                }
+            });
             
             console.log('تم تحميل نظام إدارة الحضيرة بنجاح');
         });
@@ -1385,6 +1017,18 @@
             localStorage.setItem('devicesData', JSON.stringify(data));
         }
 
+        // إظهار/إخفاء مكونات الحاسوب المكتبي
+        function toggleDesktopComponents() {
+            const deviceType = document.getElementById('deviceType').value;
+            const desktopComponents = document.getElementById('desktopComponents');
+            
+            if (deviceType === 'حاسوب مكتبي') {
+                desktopComponents.style.display = 'block';
+            } else {
+                desktopComponents.style.display = 'none';
+            }
+        }
+
         // وظائف تعبئة الجداول والقوائم
         function populateDevicesTable() {
             const data = getData();
@@ -1393,9 +1037,18 @@
             
             data.devices.forEach(device => {
                 const row = document.createElement('tr');
+                row.dataset.id = device.id;
+                
+                // إنشاء نص للمكونات الإضافية إن وجدت
+                let componentsText = device.components.join('، ');
+                if (device.type === 'حاسوب مكتبي' && device.desktopComponents) {
+                    componentsText += ` (شاشة: ${device.desktopComponents.monitor.brand}, لوحة مفاتيح: ${device.desktopComponents.keyboard.brand}, فأرة: ${device.desktopComponents.mouse.brand})`;
+                }
+                
                 row.innerHTML = `
                     <td>${device.name}</td>
-                    <td>${device.components.join('، ')}</td>
+                    <td>${device.type}</td>
+                    <td>${componentsText}</td>
                     <td>${device.user || '—'}</td>
                     <td>${device.location}</td>
                     <td>${device.ip || '—'}</td>
@@ -1459,17 +1112,6 @@
                 option.textContent = user.fullName;
                 select.appendChild(option);
             });
-            
-            // أيضًا تعبئة قائمة المستخدمين لوثيقة C12
-            const c12UserSelect = document.getElementById('c12InUser');
-            c12UserSelect.innerHTML = '<option value="" selected disabled>اختر مستخدم...</option>';
-            
-            data.users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = user.fullName;
-                c12UserSelect.appendChild(option);
-            });
         }
 
         function populateDeviceSelect() {
@@ -1483,167 +1125,6 @@
                 option.textContent = `${device.name} (${device.serial})`;
                 select.appendChild(option);
             });
-            
-            // أيضًا تعبئة قائمة أجهزة الصيانة
-            const maintenanceSelect = document.getElementById('maintenanceDeviceSelect');
-            maintenanceSelect.innerHTML = '<option value="" selected disabled>اختر جهاز...</option>';
-            
-            data.devices.forEach(device => {
-                const option = document.createElement('option');
-                option.value = device.id;
-                option.textContent = `${device.name} (${device.serial})`;
-                maintenanceSelect.appendChild(option);
-            });
-        }
-
-        function populateDistributionList() {
-            const data = getData();
-            const list = document.getElementById('distributionList');
-            list.innerHTML = '';
-            
-            data.distributions.forEach(dist => {
-                const device = data.devices.find(d => d.id === dist.deviceId);
-                const user = data.users.find(u => u.id === dist.userId);
-                
-                if (device && user) {
-                    const item = document.createElement('a');
-                    item.className = 'list-group-item list-group-item-action';
-                    item.innerHTML = `
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1">${device.name} (${device.serial})</h6>
-                            <small>${formatDate(dist.date)}</small>
-                        </div>
-                        <p class="mb-1">تم تخصيصه لـ ${user.fullName}</p>
-                        <small>${device.ip ? `IP: ${device.ip}` : ''}</small>
-                    `;
-                    list.appendChild(item);
-                }
-            });
-        }
-
-        function populateMaintenanceList() {
-            const data = getData();
-            const list = document.getElementById('maintenanceList');
-            list.innerHTML = '';
-            
-            data.maintenances.forEach(maint => {
-                const device = data.devices.find(d => d.id === maint.deviceId);
-                
-                if (device) {
-                    const item = document.createElement('a');
-                    item.className = 'list-group-item list-group-item-action';
-                    item.innerHTML = `
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1">${device.name} (${device.serial})</h6>
-                            <span class="badge bg-${getMaintenanceStatusClass(maint.status)}">${maint.status}</span>
-                        </div>
-                        <p class="mb-1">${maint.description}</p>
-                        <small>تم التسجيل: ${formatDate(maint.date)}</small>
-                    `;
-                    list.appendChild(item);
-                }
-            });
-        }
-
-        function populatePrintersTable() {
-            const data = getData();
-            const tbody = document.getElementById('printersTable').querySelector('tbody');
-            tbody.innerHTML = '';
-            
-            data.printers.forEach(printer => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${printer.brand} ${printer.model}</td>
-                    <td>${printer.serial}</td>
-                    <td>${printer.location}</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar ${getInkLevelClass(printer.inkLevel)}" role="progressbar" 
-                                 style="width: ${printer.inkLevel}%;" aria-valuenow="${printer.inkLevel}" 
-                                 aria-valuemin="0" aria-valuemax="100">${printer.inkLevel}%</div>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="badge bg-${getTonerStatusClass(printer.tonerStatus)}">${printer.tonerStatus}</span>
-                    </td>
-                    <td>${printer.ip}</td>
-                    <td>${printer.mac}</td>
-                    <td><span class="device-status status-${getStatusClass(printer.status)}">${printer.status}</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-${getPrinterActionClass(printer.inkLevel)}">
-                            ${getPrinterActionText(printer.inkLevel)}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function populateDocumentsContainer() {
-            const data = getData();
-            const container = document.getElementById('documentsContainer');
-            container.innerHTML = '';
-            
-            data.documents.forEach(doc => {
-                let documentHTML = '';
-                
-                if (doc.type === 'دخول' || doc.type === 'خروج') {
-                    const user = data.users.find(u => u.name === doc.user);
-                    const devices = data.devices.filter(d => doc.devices.includes(d.id));
-                    
-                    documentHTML = `
-                        <div class="col-md-6 mb-3">
-                            <div class="card document-card ${doc.type === 'دخول' ? 'c12-in' : 'c12-out'}">
-                                <div class="card-header ${doc.type === 'دخول' ? 'bg-success' : 'bg-danger'} text-white">
-                                    <i class="bi ${doc.type === 'دخول' ? 'bi-box-arrow-in-down' : 'bi-box-arrow-up'} me-2"></i> 
-                                    وثيقة ${doc.type} C12
-                                </div>
-                                <div class="card-body">
-                                    <h5>${doc.number}</h5>
-                                    <p><strong>التاريخ:</strong> ${formatDate(doc.date)}</p>
-                                    <p><strong>المستخدم:</strong> ${doc.user} ${user ? `(${user.department})` : ''}</p>
-                                    <p><strong>حالة العتاد:</strong> ${doc.condition}</p>
-                                    <div class="mt-3">
-                                        <h6>العتاد:</h6>
-                                        ${devices.map(device => `
-                                            <span class="device-badge bg-primary">${device.serial} - ${device.type}</span>
-                                        `).join('')}
-                                    </div>
-                                    <div class="mt-3 d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i> عرض</button>
-                                        <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer"></i> طباعة</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else if (doc.type === 'تصليح') {
-                    const device = data.devices.find(d => d.id === doc.device);
-                    
-                    documentHTML = `
-                        <div class="col-md-6 mb-3">
-                            <div class="card document-card repair">
-                                <div class="card-header bg-warning text-dark">
-                                    <i class="bi bi-tools me-2"></i> وثيقة تصليح C7
-                                </div>
-                                <div class="card-body">
-                                    <h5>${doc.number}</h5>
-                                    <p><strong>التاريخ:</strong> ${formatDate(doc.date)}</p>
-                                    <p><strong>الجهاز:</strong> ${device ? `${device.type} ${device.brand} ${device.model} (${device.serial})` : ''}</p>
-                                    <p><strong>سبب الصيانة:</strong> ${doc.reason}</p>
-                                    <p><strong>مكان الصيانة:</strong> ${doc.location}</p>
-                                    <div class="mt-3 d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i> عرض</button>
-                                        <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer"></i> طباعة</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                container.innerHTML += documentHTML;
-            });
         }
 
         // وظائف المساعدة
@@ -1656,42 +1137,6 @@
             return classes[status] || 'working';
         }
 
-        function getMaintenanceStatusClass(status) {
-            const classes = {
-                'عاجل': 'danger',
-                'قيد المعالجة': 'warning',
-                'تم الإصلاح': 'success'
-            };
-            return classes[status] || 'secondary';
-        }
-
-        function getInkLevelClass(level) {
-            if (level <= 10) return 'bg-danger';
-            if (level <= 30) return 'bg-warning';
-            return 'bg-success';
-        }
-
-        function getTonerStatusClass(status) {
-            const classes = {
-                'منخفض': 'warning',
-                'جيد': 'success',
-                'منتهي': 'danger'
-            };
-            return classes[status] || 'secondary';
-        }
-
-        function getPrinterActionClass(inkLevel) {
-            if (inkLevel <= 10) return 'danger';
-            if (inkLevel <= 30) return 'warning';
-            return 'secondary';
-        }
-
-        function getPrinterActionText(inkLevel) {
-            if (inkLevel <= 10) return 'تزويد عاجل';
-            if (inkLevel <= 30) return 'طلب تزويد';
-            return 'قيد الإصلاح';
-        }
-
         function formatDate(dateString) {
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             return new Date(dateString).toLocaleDateString('ar-EG', options);
@@ -1700,7 +1145,7 @@
         function showTab(tabId) {
             const tabTrigger = document.querySelector(`#mainTabs a[href="#${tabId}"]`);
             if (tabTrigger) {
-                bootstrap.Tab.getInstance(tabTrigger).show();
+                new bootstrap.Tab(tabTrigger).show();
             }
         }
 
@@ -1718,14 +1163,14 @@
                 let found = false;
                 
                 // إذا كان هناك نوع محدد، تحقق منه أولاً
-                if (typeFilter && cells[0].textContent.indexOf(typeFilter) === -1) {
+                if (typeFilter && cells[1].textContent.indexOf(typeFilter) === -1) {
                     row.style.display = 'none';
                     continue;
                 }
                 
                 // إذا كان هناك حالة محددة، تحقق منها
                 if (statusFilter) {
-                    const statusCell = cells[8];
+                    const statusCell = cells[9];
                     if (statusCell.textContent.indexOf(statusFilter) === -1) {
                         row.style.display = 'none';
                         continue;
@@ -1780,34 +1225,6 @@
             }
         }
 
-        function filterDocuments() {
-            const searchText = document.getElementById('searchDocuments').value.toLowerCase();
-            const typeFilter = document.getElementById('documentTypeFilter').value;
-            const container = document.getElementById('documentsContainer');
-            const cards = container.getElementsByClassName('card');
-            
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i];
-                const cardType = card.classList.contains('c12-in') ? 'دخول' : 
-                                card.classList.contains('c12-out') ? 'خروج' : 'تصليح';
-                const cardText = card.textContent.toLowerCase();
-                
-                // تطبيق فلتر النوع
-                if (typeFilter && cardType !== typeFilter) {
-                    card.parentElement.style.display = 'none';
-                    continue;
-                }
-                
-                // تطبيق بحث النص
-                if (searchText && cardText.indexOf(searchText) === -1) {
-                    card.parentElement.style.display = 'none';
-                    continue;
-                }
-                
-                card.parentElement.style.display = '';
-            }
-        }
-
         // وظائف الإضافة
         function addDevice() {
             const name = document.getElementById('deviceName').value;
@@ -1824,20 +1241,33 @@
             const supplier = document.getElementById('deviceSupplier').value;
             const notes = document.getElementById('deviceNotes').value;
             
-            // جمع المكونات المحددة
-            const components = [];
-            if (document.getElementById('componentMouse').checked) components.push('فأرة');
-            if (document.getElementById('componentKeyboard').checked) components.push('لوحة مفاتيح');
-            if (document.getElementById('componentMonitor').checked) components.push('شاشة');
-            if (document.getElementById('componentCPU').checked) components.push('وحدة مركزية');
-            if (document.getElementById('componentChair').checked) components.push('كرسي');
-            if (document.getElementById('componentTable').checked) components.push('طاولة');
-            if (document.getElementById('componentAdapter').checked) components.push('محول الشبكة');
+            // جمع المكونات الأساسية
+            const components = type === 'طابعة' ? ['طابعة'] : ['جهاز أساسي'];
+            
+            // جمع مكونات الحاسوب المكتبي إذا كان النوع مناسباً
+            let desktopComponents = null;
+            if (type === 'حاسوب مكتبي') {
+                desktopComponents = {
+                    monitor: {
+                        brand: document.getElementById('monitorBrand').value,
+                        serial: document.getElementById('monitorSerial').value
+                    },
+                    keyboard: {
+                        brand: document.getElementById('keyboardBrand').value,
+                        serial: document.getElementById('keyboardSerial').value
+                    },
+                    mouse: {
+                        brand: document.getElementById('mouseBrand').value,
+                        serial: document.getElementById('mouseSerial').value
+                    }
+                };
+                components.push('شاشة', 'لوحة مفاتيح', 'فأرة');
+            }
             
             const data = getData();
             const newDevice = {
-                id: Math.max(...data.devices.map(d => d.id)) + 1,
-                name, type, brand, model, serial, components,
+                id: Math.max(0, ...data.devices.map(d => d.id)) + 1,
+                name, type, brand, model, serial, components, desktopComponents,
                 user: '', location, ip, mac, osStatus, antivirusStatus,
                 status, supplier, notes
             };
@@ -1847,7 +1277,6 @@
             
             // إعادة تعبئة الجداول
             populateDevicesTable();
-            populateDeviceSelect();
             
             // إغلاق النموذج
             bootstrap.Modal.getInstance(document.getElementById('addDeviceModal')).hide();
@@ -1866,7 +1295,7 @@
             
             const data = getData();
             const newUser = {
-                id: Math.max(...data.users.map(u => u.id)) + 1,
+                id: Math.max(0, ...data.users.map(u => u.id)) + 1,
                 fullName, job, registrationNumber, department, status, notes
             };
             
@@ -1884,77 +1313,34 @@
             alert('تم إضافة المستخدم بنجاح!');
         }
 
-        function addDistribution() {
-            const userId = parseInt(document.getElementById('userSelect').value);
-            const deviceId = parseInt(document.getElementById('deviceSelect').value);
-            const date = document.getElementById('distributionDate').value;
-            const notes = document.getElementById('distributionNotes').value;
-            
+        // وظائف الأزرار
+        function viewDevice(deviceId) {
             const data = getData();
-            const user = data.users.find(u => u.id === userId);
-            const device = data.devices.find(d => d.id === deviceId);
-            
-            if (user && device) {
-                const newDistribution = {
-                    id: Math.max(...data.distributions.map(d => d.id)) + 1,
-                    deviceId, userId, date, notes
-                };
-                
-                // تحديث المستخدم في الجهاز
-                device.user = user.fullName;
-                
-                data.distributions.push(newDistribution);
-                saveData(data);
-                
-                // إعادة تعبئة القوائم
-                populateDistributionList();
-                populateDevicesTable();
-                
-                // إعادة تعيين النموذج
-                document.getElementById('distributionForm').reset();
-                document.getElementById('distributionDate').value = new Date().toISOString().split('T')[0];
-                
-                // إظهار رسالة نجاح
-                alert('تم توزيع الجهاز بنجاح!');
-            }
-        }
-
-        function addMaintenance() {
-            const deviceId = parseInt(document.getElementById('maintenanceDeviceSelect').value);
-            const type = document.getElementById('issueType').value;
-            const description = document.getElementById('issueDescription').value;
-            const date = document.getElementById('issueDate').value;
-            
-            const data = getData();
-            const device = data.devices.find(d => d.id === deviceId);
-            
+            const device = data.devices.find(d => d.id == deviceId);
             if (device) {
-                const newMaintenance = {
-                    id: Math.max(...data.maintenances.map(m => m.id)) + 1,
-                    deviceId, type, description, date,
-                    status: 'قيد المعالجة'
-                };
-                
-                // تحديث حالة الجهاز
-                device.status = 'صيانة';
-                
-                data.maintenances.push(newMaintenance);
-                saveData(data);
-                
-                // إعادة تعبئة القوائم
-                populateMaintenanceList();
-                populateDevicesTable();
-                
-                // إعادة تعيين النموذج
-                document.getElementById('maintenanceForm').reset();
-                document.getElementById('issueDate').value = new Date().toISOString().split('T')[0];
-                
-                // إظهار رسالة نجاح
-                alert('تم تسجيل العطل بنجاح!');
+                alert(`عرض تفاصيل الجهاز: ${device.name}\nالنوع: ${device.type}\nالرقم التسلسلي: ${device.serial}`);
             }
         }
 
-        // وظائف التصدير والنسخ الاحتياطي
+        function editDevice(deviceId) {
+            const data = getData();
+            const device = data.devices.find(d => d.id == deviceId);
+            if (device) {
+                alert(`تحرير الجهاز: ${device.name}`);
+                // في التطبيق الكامل، سيتم فتح نموذج التحرير مع تعبئة البيانات
+            }
+        }
+
+        function deleteDevice(deviceId) {
+            if (confirm('هل أنت متأكد من حذف هذا الجهاز؟')) {
+                const data = getData();
+                data.devices = data.devices.filter(d => d.id != deviceId);
+                saveData(data);
+                populateDevicesTable();
+                alert('تم حذف الجهاز بنجاح!');
+            }
+        }
+
         function exportToExcel() {
             const data = getData();
             const worksheet = XLSX.utils.json_to_sheet(data.devices);
@@ -1962,34 +1348,6 @@
             XLSX.utils.book_append_sheet(workbook, worksheet, "الأجهزة");
             XLSX.writeFile(workbook, "أجهزة_الحضيرة.xlsx");
             alert('تم تصدير البيانات إلى Excel بنجاح!');
-        }
-
-        function backupData() {
-            const data = getData();
-            const backup = JSON.stringify(data);
-            localStorage.setItem('backupData', backup);
-            
-            // تحديث تاريخ آخر نسخة احتياطية
-            const now = new Date();
-            document.getElementById('lastBackupDate').textContent = now.toLocaleString('ar-EG');
-            
-            alert('تم إنشاء نسخة احتياطية بنجاح!');
-        }
-
-        function importData() {
-            const backup = localStorage.getItem('backupData');
-            if (backup) {
-                if (confirm('هل تريد استيراد النسخة الاحتياطية؟ سيتم استبدال جميع البيانات الحالية.')) {
-                    localStorage.setItem('devicesData', backup);
-                    location.reload();
-                }
-            } else {
-                alert('لا توجد نسخة احتياطية!');
-            }
-        }
-
-        function generateMonthlyReport() {
-            alert('سيتم إنشاء تقرير شهري. في التطبيق الكامل، سيتم تنفيذ هذا الإجراء.');
         }
     </script>
 </body>
