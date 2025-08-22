@@ -265,6 +265,42 @@
             justify-content: center;
             padding: 0;
         }
+        
+        .component-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .filter-section {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box .form-control {
+            padding-right: 40px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            color: #6c757d;
+        }
+        
+        .user-card {
+            transition: all 0.3s;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body>
@@ -336,25 +372,25 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card stats-card" onclick="showTab('devices')">
-                            <div class="stats-number">156</div>
-                            <div class="stats-title">عدد الأجهزة</div>
+                            <div class="stats-number">42</div>
+                            <div class="stats-title">مجموعات الأجهزة</div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card stats-card" onclick="showTab('maintenance')">
-                            <div class="stats-number">12</div>
+                            <div class="stats-number">8</div>
                             <div class="stats-title">أجهزة تحت الصيانة</div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card stats-card" onclick="showTab('printers')">
-                            <div class="stats-number">5</div>
+                            <div class="stats-number">3</div>
                             <div class="stats-title">طابعات تحتاج حبر</div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card stats-card" onclick="showTab('distribution')">
-                            <div class="stats-number">32</div>
+                        <div class="card stats-card" onclick="showTab('users')">
+                            <div class="stats-number">28</div>
                             <div class="stats-title">المستخدمين النشطين</div>
                         </div>
                     </div>
@@ -406,6 +442,9 @@
                                 <a class="nav-link active" data-bs-toggle="tab" href="#devices">الأجهزة</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#users">المستخدمين</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#distribution">التوزيع</a>
                             </li>
                             <li class="nav-item">
@@ -426,34 +465,44 @@
                         <div class="tab-content">
                             <!-- تبويب الأجهزة -->
                             <div class="tab-pane fade show active" id="devices">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <h5>قائمة الأجهزة</h5>
-                                    <div class="d-flex">
-                                        <input type="text" class="form-control me-2" placeholder="بحث..." id="searchDevices">
-                                        <select class="form-select me-2" id="deviceTypeFilter">
-                                            <option value="">جميع الأنواع</option>
-                                            <option value="حاسوب">حاسوب</option>
-                                            <option value="شاشة">شاشة</option>
-                                            <option value="طابعة">طابعة</option>
-                                            <option value="شبكة">شبكة</option>
-                                        </select>
-                                        <button class="btn btn-outline-primary" id="refreshDevicesBtn">
-                                            <i class="bi bi-arrow-clockwise"></i>
-                                        </button>
+                                <div class="filter-section">
+                                    <div class="row">
+                                        <div class="col-md-6 search-box">
+                                            <input type="text" class="form-control" placeholder="بحث في الأجهزة..." id="searchDevices">
+                                            <i class="bi bi-search search-icon"></i>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="deviceTypeFilter">
+                                                <option value="">جميع الأنواع</option>
+                                                <option value="حاسوب">حاسوب</option>
+                                                <option value="طابعة">طابعة</option>
+                                                <option value="شاشة">شاشة</option>
+                                                <option value="شبكة">شبكة</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="deviceStatusFilter">
+                                                <option value="">جميع الحالات</option>
+                                                <option value="يعمل">يعمل</option>
+                                                <option value="صيانة">تحت الصيانة</option>
+                                                <option value="عطل">عطل</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
+                                
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover" id="devicesTable">
                                         <thead>
                                             <tr>
-                                                <th>النوع</th>
-                                                <th>العلامة/الماركة</th>
-                                                <th>النموذج</th>
-                                                <th>الرقم التسلسلي</th>
-                                                <th>التسمية</th>
+                                                <th>اسم الجهاز</th>
+                                                <th>المكونات</th>
                                                 <th>المستخدم</th>
+                                                <th>الموقع</th>
                                                 <th>عنوان IP</th>
                                                 <th>عنوان MAC</th>
+                                                <th>حالة النظام</th>
+                                                <th>حالة مضاد الفيروسات</th>
                                                 <th>الحالة</th>
                                                 <th>الإجراءات</th>
                                             </tr>
@@ -462,6 +511,45 @@
                                             <!-- سيتم ملء هذا الجدول بواسطة JavaScript -->
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+
+                            <!-- تبويب المستخدمين -->
+                            <div class="tab-pane fade" id="users">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5>إدارة المستخدمين</h5>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                        <i class="bi bi-person-plus me-1"></i> إضافة مستخدم
+                                    </button>
+                                </div>
+                                
+                                <div class="filter-section">
+                                    <div class="row">
+                                        <div class="col-md-6 search-box">
+                                            <input type="text" class="form-control" placeholder="بحث في المستخدمين..." id="searchUsers">
+                                            <i class="bi bi-search search-icon"></i>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="userDepartmentFilter">
+                                                <option value="">جميع الأقسام</option>
+                                                <option value="الإدارة">الإدارة</option>
+                                                <option value="المحاسبة">المحاسبة</option>
+                                                <option value="التطوير">التطوير</option>
+                                                <option value="المبيعات">المبيعات</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="userStatusFilter">
+                                                <option value="">جميع الحالات</option>
+                                                <option value="نشط">نشط</option>
+                                                <option value="غير نشط">غير نشط</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row" id="usersContainer">
+                                    <!-- سيتم ملء هذه المنطقة بواسطة JavaScript -->
                                 </div>
                             </div>
 
@@ -622,7 +710,7 @@
                                             <i class="bi bi-box-arrow-up me-1"></i> وثيقة خروج C12
                                         </button>
                                         <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#repairModal">
-                                            <i class="bi bi-tools me-1"></i> وثيقة تصليح
+                                            <i class="bi bi-tools me-1"></i> وثيقة تصليح C7
                                         </button>
                                     </div>
                                     <div class="d-flex">
@@ -631,7 +719,7 @@
                                             <option value="">جميع الوثائق</option>
                                             <option value="دخول">C12 دخول</option>
                                             <option value="خروج">C12 خروج</option>
-                                            <option value="تصليح">وثيقة تصليح</option>
+                                            <option value="تصليح">وثيقة تصليح C7</option>
                                         </select>
                                     </div>
                                 </div>
@@ -657,19 +745,19 @@
                                                 <div class="list-group">
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         الأجهزة العاملة
-                                                        <span class="badge bg-primary rounded-pill">142</span>
+                                                        <span class="badge bg-primary rounded-pill">34</span>
                                                     </div>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         الأجهزة المعطلة
-                                                        <span class="badge bg-danger rounded-pill">8</span>
+                                                        <span class="badge bg-danger rounded-pill">5</span>
                                                     </div>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         الأجهزة قيد الصيانة
-                                                        <span class="badge bg-warning rounded-pill">6</span>
+                                                        <span class="badge bg-warning rounded-pill">3</span>
                                                     </div>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         الأجهزة المقترحة للصرف
-                                                        <span class="badge bg-secondary rounded-pill">4</span>
+                                                        <span class="badge bg-secondary rounded-pill">2</span>
                                                     </div>
                                                 </div>
                                                 <button class="btn btn-outline-primary mt-3 w-100">تصدير التقرير</button>
@@ -689,19 +777,19 @@
                                                 <div class="list-group">
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         المستخدمين النشطين
-                                                        <span class="badge bg-success rounded-pill">32</span>
+                                                        <span class="badge bg-success rounded-pill">28</span>
                                                     </div>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         المستخدمين الجدد
-                                                        <span class="badge bg-info rounded-pill">5</span>
+                                                        <span class="badge bg-info rounded-pill">4</span>
                                                     </div>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         أجهزة تم توزيعها
-                                                        <span class="badge bg-primary rounded-pill">18</span>
+                                                        <span class="badge bg-primary rounded-pill">12</span>
                                                     </div>
                                                     <div class="list-group-item d-flex justify-content-between align-items-center">
                                                         أجهزة تم استرجاعها
-                                                        <span class="badge bg-warning rounded-pill">3</span>
+                                                        <span class="badge bg-warning rounded-pill">2</span>
                                                     </div>
                                                 </div>
                                                 <button class="btn btn-outline-success mt-3 w-100">تصدير التقرير</button>
@@ -725,15 +813,15 @@
                                                         <div class="list-group">
                                                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                                                 الأجهزة المتصلة بالشبكة
-                                                                <span class="badge bg-success rounded-pill">125</span>
+                                                                <span class="badge bg-success rounded-pill">38</span>
                                                             </div>
                                                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                                                 عناوين IP مستخدمة
-                                                                <span class="badge bg-info rounded-pill">142</span>
+                                                                <span class="badge bg-info rounded-pill">42</span>
                                                             </div>
                                                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                                                 انقطاعات الشبكة
-                                                                <span class="badge bg-danger rounded-pill">2</span>
+                                                                <span class="badge bg-danger rounded-pill">1</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -777,17 +865,17 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label class="form-label">اسم الجهاز</label>
+                                    <input type="text" class="form-control" id="deviceName" required>
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label">نوع الجهاز</label>
                                     <select class="form-select" id="deviceType" required>
                                         <option value="" selected disabled>اختر نوع الجهاز...</option>
                                         <option value="حاسوب">حاسوب</option>
-                                        <option value="شاشة">شاشة</option>
                                         <option value="طابعة">طابعة</option>
+                                        <option value="شاشة">شاشة</option>
                                         <option value="شبكة">جهاز شبكة</option>
-                                        <option value="لوحة مفاتيح">لوحة مفاتيح</option>
-                                        <option value="فأرة">فأرة</option>
-                                        <option value="طاولة">طاولة</option>
-                                        <option value="كرسي">كرسي</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -798,15 +886,11 @@
                                     <label class="form-label">النموذج</label>
                                     <input type="text" class="form-control" id="deviceModel" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">الرقم التسلسلي</label>
-                                    <input type="text" class="form-control" id="deviceSerial" required>
-                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">التسمية</label>
-                                    <input type="text" class="form-control" id="deviceLabel" required>
+                                    <label class="form-label">الرقم التسلسلي</label>
+                                    <input type="text" class="form-control" id="deviceSerial" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">عنوان IP (إذا كان مربوطًا بالشبكة)</label>
@@ -817,15 +901,83 @@
                                     <input type="text" class="form-control" id="deviceMAC">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">الحالة الأولية</label>
-                                    <select class="form-select" id="deviceStatus" required>
-                                        <option value="يعمل" selected>يعمل</option>
-                                        <option value="صيانة">تحت الصيانة</option>
-                                        <option value="عطل">عطل</option>
+                                    <label class="form-label">الموقع</label>
+                                    <input type="text" class="form-control" id="deviceLocation" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">المكونات</label>
+                            <div class="component-list border p-2 rounded">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentMouse">
+                                    <label class="form-check-label" for="componentMouse">فأرة</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentKeyboard">
+                                    <label class="form-check-label" for="componentKeyboard">لوحة مفاتيح</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentMonitor">
+                                    <label class="form-check-label" for="componentMonitor">شاشة</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentCPU">
+                                    <label class="form-check-label" for="componentCPU">وحدة مركزية</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentChair">
+                                    <label class="form-check-label" for="componentChair">كرسي</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentTable">
+                                    <label class="form-check-label" for="componentTable">طاولة</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="componentAdapter">
+                                    <label class="form-check-label" for="componentAdapter">محول الشبكة</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">حالة النظام</label>
+                                    <select class="form-select" id="osStatus" required>
+                                        <option value="يعمل بشكل طبيعي">يعمل بشكل طبيعي</option>
+                                        <option value="يحتاج تحديث">يحتاج تحديث</option>
+                                        <option value="يحتاج إصلاح">يحتاج إصلاح</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">حالة مضاد الفيروسات</label>
+                                    <select class="form-select" id="antivirusStatus" required>
+                                        <option value="مثبت ومحدث">مثبت ومحدث</option>
+                                        <option value="يحتاج تحديث">يحتاج تحديث</option>
+                                        <option value="غير مثبت">غير مثبت</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">الحالة</label>
+                            <select class="form-select" id="deviceStatus" required>
+                                <option value="يعمل" selected>يعمل</option>
+                                <option value="صيانة">تحت الصيانة</option>
+                                <option value="عطل">عطل</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">الجهة المزودة</label>
+                            <input type="text" class="form-control" id="deviceSupplier">
+                        </div>
+                        
                         <div class="mb-3">
                             <label class="form-label">ملاحظات</label>
                             <textarea class="form-control" id="deviceNotes" rows="2"></textarea>
@@ -835,6 +987,60 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
                     <button type="button" class="btn btn-primary" id="saveDeviceBtn">حفظ الجهاز</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة مستخدم -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">إضافة مستخدم جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label class="form-label">الاسم الكامل</label>
+                            <input type="text" class="form-control" id="userFullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الوظيفة</label>
+                            <input type="text" class="form-control" id="userJob" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">رقم التسجيل</label>
+                            <input type="text" class="form-control" id="userRegistrationNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">المصلحة/القسم</label>
+                            <select class="form-select" id="userDepartment" required>
+                                <option value="" selected disabled>اختر القسم...</option>
+                                <option value="الإدارة">الإدارة</option>
+                                <option value="المحاسبة">المحاسبة</option>
+                                <option value="التطوير">التطوير</option>
+                                <option value="المبيعات">المبيعات</option>
+                                <option value="الدعم">الدعم</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الحالة</label>
+                            <select class="form-select" id="userStatus" required>
+                                <option value="نشط" selected>نشط</option>
+                                <option value="غير نشط">غير نشط</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ملاحظات</label>
+                            <textarea class="form-control" id="userNotes" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">حفظ المستخدم</button>
                 </div>
             </div>
         </div>
@@ -907,39 +1113,201 @@
         // بيانات وهمية للنظام
         const mockData = {
             devices: [
-                { id: 1, type: "حاسوب", brand: "Dell", model: "Optiplex 7070", serial: "PC-2023-001", label: "حاسوب الإدارة 1", user: "أحمد محمد", ip: "192.168.1.101", mac: "00:1A:2B:3C:4D:5E", status: "يعمل" },
-                { id: 2, type: "طابعة", brand: "Canon", model: "LBP232", serial: "PR-2023-015", label: "طابعة القسم 2", user: "مشترك", ip: "192.168.1.215", mac: "00:1B:2C:3D:4E:5F", status: "صيانة" },
-                { id: 3, type: "شاشة", brand: "Samsung", model: "S24F350", serial: "MN-2023-078", label: "شاشة تطوير 3", user: "فاطمة الزهراء", ip: "", mac: "", status: "يعمل" },
-                { id: 4, type: "شبكة", brand: "Cisco", model: "RV340", serial: "RT-2023-005", label: "راوتر رئيسي", user: "", ip: "192.168.0.1", mac: "00:1C:2D:3E:4F:5A", status: "عطل" },
-                { id: 5, type: "حاسوب", brand: "HP", model: "EliteDesk 800", serial: "PC-2023-102", label: "حاسوب المبيعات 1", user: "محمد علي", ip: "192.168.1.102", mac: "00:2A:3B:4C:5D:6E", status: "يعمل" },
-                { id: 6, type: "طابعة", brand: "HP", model: "LaserJet Pro", serial: "PR-2023-022", label: "طابعة الإدارة", user: "مشترك", ip: "192.168.1.220", mac: "00:2B:3C:4D:5E:6F", status: "يعمل" }
+                { 
+                    id: 1, 
+                    name: "حاسوب الإدارة 1",
+                    type: "حاسوب", 
+                    brand: "Dell", 
+                    model: "Optiplex 7070", 
+                    serial: "PC-2023-001", 
+                    components: ["فأرة", "لوحة مفاتيح", "شاشة", "وحدة مركزية", "كرسي", "طاولة"],
+                    user: "أحمد محمد", 
+                    location: "الطابق الأول - الغرفة 101",
+                    ip: "192.168.1.101", 
+                    mac: "00:1A:2B:3C:4D:5E", 
+                    osStatus: "يعمل بشكل طبيعي",
+                    antivirusStatus: "مثبت ومحدث",
+                    status: "يعمل",
+                    supplier: "شركة التقنية المحدودة"
+                },
+                { 
+                    id: 2, 
+                    name: "طابعة القسم 2",
+                    type: "طابعة", 
+                    brand: "Canon", 
+                    model: "LBP232", 
+                    serial: "PR-2023-015", 
+                    components: ["طابعة ليزر"],
+                    user: "مشترك", 
+                    location: "الطابق الثاني - المطبخ",
+                    ip: "192.168.1.215", 
+                    mac: "00:1B:2C:3D:4E:5F", 
+                    osStatus: "يعمل بشكل طبيعي",
+                    antivirusStatus: "لا ينطبق",
+                    status: "صيانة",
+                    supplier: "شركة الأجهزة المتحدة"
+                },
+                { 
+                    id: 3, 
+                    name: "شاشة تطوير 3",
+                    type: "شاشة", 
+                    brand: "Samsung", 
+                    model: "S24F350", 
+                    serial: "MN-2023-078", 
+                    components: ["شاشة LED"],
+                    user: "فاطمة الزهراء", 
+                    location: "الطابق الثالث - الغرفة 302",
+                    ip: "", 
+                    mac: "", 
+                    osStatus: "لا ينطبق",
+                    antivirusStatus: "لا ينطبق",
+                    status: "يعمل",
+                    supplier: "شركة الشاشات الحديثة"
+                },
+                { 
+                    id: 4, 
+                    name: "راوتر رئيسي",
+                    type: "شبكة", 
+                    brand: "Cisco", 
+                    model: "RV340", 
+                    serial: "RT-2023-005", 
+                    components: ["جهاز توجيه", "محول شبكة"],
+                    user: "", 
+                    location: "غرفة الخوادم",
+                    ip: "192.168.0.1", 
+                    mac: "00:1C:2D:3E:4F:5A", 
+                    osStatus: "يحتاج تحديث",
+                    antivirusStatus: "غير مثبت",
+                    status: "عطل",
+                    supplier: "شركة شبكات المتقدمة"
+                }
             ],
             users: [
-                { id: 1, name: "أحمد محمد", department: "الإدارة", position: "مدير" },
-                { id: 2, name: "فاطمة الزهراء", department: "التطوير", position: "مبرمجة" },
-                { id: 3, name: "علي حسين", department: "المبيعات", position: "منسق مبيعات" },
-                { id: 4, name: "محمد علي", department: "المبيعات", position: "مندوب مبيعات" },
-                { id: 5, name: "سارة خالد", department: "المحاسبة", position: "محاسبة" }
+                { 
+                    id: 1, 
+                    fullName: "أحمد محمد", 
+                    job: "مدير قسم تكنولوجيا المعلومات", 
+                    registrationNumber: "EMP-2020-001",
+                    department: "الإدارة", 
+                    status: "نشط",
+                    notes: "يستخدم جهاز حاسوب متطور"
+                },
+                { 
+                    id: 2, 
+                    fullName: "فاطمة الزهراء", 
+                    job: "مبرمجة", 
+                    registrationNumber: "EMP-2021-015",
+                    department: "التطوير", 
+                    status: "نشط",
+                    notes: "تعمل على مشاريع التطوير الرئيسية"
+                },
+                { 
+                    id: 3, 
+                    fullName: "علي حسين", 
+                    job: "منسق مبيعات", 
+                    registrationNumber: "EMP-2022-023",
+                    department: "المبيعات", 
+                    status: "نشط",
+                    notes: "يحتاج إلى جهاز محمول للعمل الميداني"
+                },
+                { 
+                    id: 4, 
+                    fullName: "سارة خالد", 
+                    job: "محاسبة", 
+                    registrationNumber: "EMP-2019-078",
+                    department: "المحاسبة", 
+                    status: "غير نشط",
+                    notes: "في إجازة طويلة"
+                }
             ],
             distributions: [
-                { id: 1, deviceId: 1, userId: 1, date: "2023-10-15", notes: "توزيع جهاز جديد" },
-                { id: 2, deviceId: 3, userId: 2, date: "2023-10-12", notes: "استبدال شاشة" },
-                { id: 3, deviceId: 5, userId: 4, date: "2023-10-10", notes: "تجهيز موظف جديد" }
+                { 
+                    id: 1, 
+                    deviceId: 1, 
+                    userId: 1, 
+                    date: "2023-10-15", 
+                    notes: "توزيع جهاز جديد للمدير" 
+                },
+                { 
+                    id: 2, 
+                    deviceId: 3, 
+                    userId: 2, 
+                    date: "2023-10-12", 
+                    notes: "استبدال شاشة قديمة" 
+                }
             ],
             maintenances: [
-                { id: 1, deviceId: 2, type: "عطل hardware", description: "مشكلة في تغذية الورق", date: "2023-10-12", status: "قيد المعالجة" },
-                { id: 2, deviceId: 4, type: "عطل شبكي", description: "انقطع الاتصال بالشبكة", date: "2023-10-15", status: "عاجل" },
-                { id: 3, deviceId: 6, type: "عطل software", description: "需要安装新驱动程序", date: "2023-10-05", status: "تم الإصلاح" }
+                { 
+                    id: 1, 
+                    deviceId: 2, 
+                    type: "عطل hardware", 
+                    description: "مشكلة في تغذية الورق", 
+                    date: "2023-10-12", 
+                    status: "قيد المعالجة" 
+                },
+                { 
+                    id: 2, 
+                    deviceId: 4, 
+                    type: "عطل شبكي", 
+                    description: "انقطع الاتصال بالشبكة", 
+                    date: "2023-10-15", 
+                    status: "عاجل" 
+                }
             ],
             printers: [
-                { id: 1, brand: "Canon", model: "LBP232", serial: "PR-2023-008", location: "قسم المحاسبة", inkLevel: 15, tonerStatus: "منخفض", ip: "192.168.1.208", mac: "00:1D:2E:3F:4A:5B", status: "تعمل" },
-                { id: 2, brand: "HP", model: "LaserJet Pro", serial: "PR-2023-015", location: "قسم التسويق", inkLevel: 65, tonerStatus: "جيد", ip: "192.168.1.215", mac: "00:1E:2F:3A:4B:5C", status: "تحت الصيانة" },
-                { id: 3, brand: "Epson", model: "WorkForce", serial: "PR-2023-023", location: "الإدارة", inkLevel: 5, tonerStatus: "منتهي", ip: "192.168.1.223", mac: "00:1F:2A:3B:4C:5D", status: "تعمل" }
+                { 
+                    id: 1, 
+                    brand: "Canon", 
+                    model: "LBP232", 
+                    serial: "PR-2023-008", 
+                    location: "قسم المحاسبة", 
+                    inkLevel: 15, 
+                    tonerStatus: "منخفض", 
+                    ip: "192.168.1.208", 
+                    mac: "00:1D:2E:3F:4A:5B", 
+                    status: "تعمل" 
+                },
+                { 
+                    id: 2, 
+                    brand: "HP", 
+                    model: "LaserJet Pro", 
+                    serial: "PR-2023-015", 
+                    location: "قسم التسويق", 
+                    inkLevel: 65, 
+                    tonerStatus: "جيد", 
+                    ip: "192.168.1.215", 
+                    mac: "00:1E:2F:3A:4B:5C", 
+                    status: "تحت الصيانة" 
+                }
             ],
             documents: [
-                { id: 1, type: "دخول", number: "C12-2023-001", date: "2023-10-01", user: "أحمد محمد", devices: [1, 3], condition: "جميع الأجهزة بحالة جيدة" },
-                { id: 2, type: "خروج", number: "C12-2023-002", date: "2023-10-05", user: "فاطمة الزهراء", devices: [3], condition: "تم استرجاع الشاشة بحالة جيدة" },
-                { id: 3, type: "تصليح", number: "REP-2023-001", date: "2023-10-10", device: 2, reason: "مشكلة في تغذية الورق", location: "مركز الصيانة المعتمد" }
+                { 
+                    id: 1, 
+                    type: "دخول", 
+                    number: "C12-2023-001", 
+                    date: "2023-10-01", 
+                    user: "أحمد محمد", 
+                    devices: [1, 3], 
+                    condition: "جميع الأجهزة بحالة جيدة" 
+                },
+                { 
+                    id: 2, 
+                    type: "خروج", 
+                    number: "C12-2023-002", 
+                    date: "2023-10-05", 
+                    user: "فاطمة الزهراء", 
+                    devices: [3], 
+                    condition: "تم استرجاع الشاشة بحالة جيدة" 
+                },
+                { 
+                    id: 3, 
+                    type: "تصليح", 
+                    number: "C7-2023-001", 
+                    date: "2023-10-10", 
+                    device: 2, 
+                    reason: "مشكلة في تغذية الورق", 
+                    location: "مركز الصيانة المعتمد" 
+                }
             ]
         };
 
@@ -956,6 +1324,7 @@
             
             // تعبئة الجداول والقوائم
             populateDevicesTable();
+            populateUsersContainer();
             populateUserSelect();
             populateDeviceSelect();
             populateDistributionList();
@@ -966,7 +1335,11 @@
             // إضافة مستمعي الأحداث
             document.getElementById('searchDevices').addEventListener('keyup', filterDevicesTable);
             document.getElementById('deviceTypeFilter').addEventListener('change', filterDevicesTable);
-            document.getElementById('refreshDevicesBtn').addEventListener('click', populateDevicesTable);
+            document.getElementById('deviceStatusFilter').addEventListener('change', filterDevicesTable);
+            
+            document.getElementById('searchUsers').addEventListener('keyup', filterUsers);
+            document.getElementById('userDepartmentFilter').addEventListener('change', filterUsers);
+            document.getElementById('userStatusFilter').addEventListener('change', filterUsers);
             
             document.getElementById('distributionForm').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -979,6 +1352,7 @@
             });
             
             document.getElementById('saveDeviceBtn').addEventListener('click', addDevice);
+            document.getElementById('saveUserBtn').addEventListener('click', addUser);
             
             document.getElementById('exportBtn').addEventListener('click', exportToExcel);
             document.getElementById('backupBtn').addEventListener('click', backupData);
@@ -1020,14 +1394,14 @@
             data.devices.forEach(device => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><i class="bi bi-${getDeviceIcon(device.type)}"></i> ${device.type}</td>
-                    <td>${device.brand}</td>
-                    <td>${device.model}</td>
-                    <td>${device.serial}</td>
-                    <td>${device.label}</td>
+                    <td>${device.name}</td>
+                    <td>${device.components.join('، ')}</td>
                     <td>${device.user || '—'}</td>
+                    <td>${device.location}</td>
                     <td>${device.ip || '—'}</td>
                     <td>${device.mac || '—'}</td>
+                    <td>${device.osStatus}</td>
+                    <td>${device.antivirusStatus}</td>
                     <td><span class="device-status status-${getStatusClass(device.status)}">${device.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary btn-action"><i class="bi bi-eye"></i></button>
@@ -1039,6 +1413,41 @@
             });
         }
 
+        function populateUsersContainer() {
+            const data = getData();
+            const container = document.getElementById('usersContainer');
+            container.innerHTML = '';
+            
+            data.users.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'col-md-6 mb-3';
+                userCard.innerHTML = `
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title">${user.fullName}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">${user.job}</h6>
+                                </div>
+                                <span class="badge bg-${user.status === 'نشط' ? 'success' : 'secondary'}">${user.status}</span>
+                            </div>
+                            <p class="card-text">
+                                <strong>رقم التسجيل:</strong> ${user.registrationNumber}<br>
+                                <strong>القسم:</strong> ${user.department}<br>
+                                <strong>ملاحظات:</strong> ${user.notes}
+                            </p>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i> عرض</button>
+                                <button class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-pencil"></i> تعديل</button>
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> حذف</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(userCard);
+            });
+        }
+
         function populateUserSelect() {
             const data = getData();
             const select = document.getElementById('userSelect');
@@ -1047,8 +1456,19 @@
             data.users.forEach(user => {
                 const option = document.createElement('option');
                 option.value = user.id;
-                option.textContent = user.name;
+                option.textContent = user.fullName;
                 select.appendChild(option);
+            });
+            
+            // أيضًا تعبئة قائمة المستخدمين لوثيقة C12
+            const c12UserSelect = document.getElementById('c12InUser');
+            c12UserSelect.innerHTML = '<option value="" selected disabled>اختر مستخدم...</option>';
+            
+            data.users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.fullName;
+                c12UserSelect.appendChild(option);
             });
         }
 
@@ -1060,7 +1480,7 @@
             data.devices.forEach(device => {
                 const option = document.createElement('option');
                 option.value = device.id;
-                option.textContent = `${device.serial} - ${device.type} ${device.brand} ${device.model}`;
+                option.textContent = `${device.name} (${device.serial})`;
                 select.appendChild(option);
             });
             
@@ -1071,7 +1491,7 @@
             data.devices.forEach(device => {
                 const option = document.createElement('option');
                 option.value = device.id;
-                option.textContent = `${device.serial} - ${device.type} ${device.brand} ${device.model}`;
+                option.textContent = `${device.name} (${device.serial})`;
                 maintenanceSelect.appendChild(option);
             });
         }
@@ -1090,10 +1510,10 @@
                     item.className = 'list-group-item list-group-item-action';
                     item.innerHTML = `
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1">${device.type} ${device.brand} ${device.model} (${device.serial})</h6>
+                            <h6 class="mb-1">${device.name} (${device.serial})</h6>
                             <small>${formatDate(dist.date)}</small>
                         </div>
-                        <p class="mb-1">تم تخصيصه لـ ${user.name}</p>
+                        <p class="mb-1">تم تخصيصه لـ ${user.fullName}</p>
                         <small>${device.ip ? `IP: ${device.ip}` : ''}</small>
                     `;
                     list.appendChild(item);
@@ -1114,7 +1534,7 @@
                     item.className = 'list-group-item list-group-item-action';
                     item.innerHTML = `
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1">${device.type} ${device.brand} ${device.model} (${device.serial})</h6>
+                            <h6 class="mb-1">${device.name} (${device.serial})</h6>
                             <span class="badge bg-${getMaintenanceStatusClass(maint.status)}">${maint.status}</span>
                         </div>
                         <p class="mb-1">${maint.description}</p>
@@ -1204,7 +1624,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="card document-card repair">
                                 <div class="card-header bg-warning text-dark">
-                                    <i class="bi bi-tools me-2"></i> وثيقة تصليح
+                                    <i class="bi bi-tools me-2"></i> وثيقة تصليح C7
                                 </div>
                                 <div class="card-body">
                                     <h5>${doc.number}</h5>
@@ -1227,20 +1647,6 @@
         }
 
         // وظائف المساعدة
-        function getDeviceIcon(type) {
-            const icons = {
-                'حاسوب': 'pc-display',
-                'طابعة': 'printer',
-                'شاشة': 'display',
-                'شبكة': 'router',
-                'لوحة مفاتيح': 'keyboard',
-                'فأرة': 'mouse',
-                'طاولة': 'table',
-                'كرسي': 'chair'
-            };
-            return icons[type] || 'device';
-        }
-
         function getStatusClass(status) {
             const classes = {
                 'يعمل': 'working',
@@ -1302,6 +1708,7 @@
         function filterDevicesTable() {
             const searchText = document.getElementById('searchDevices').value.toLowerCase();
             const typeFilter = document.getElementById('deviceTypeFilter').value;
+            const statusFilter = document.getElementById('deviceStatusFilter').value;
             const table = document.getElementById('devicesTable');
             const rows = table.getElementsByTagName('tr');
             
@@ -1316,6 +1723,15 @@
                     continue;
                 }
                 
+                // إذا كان هناك حالة محددة، تحقق منها
+                if (statusFilter) {
+                    const statusCell = cells[8];
+                    if (statusCell.textContent.indexOf(statusFilter) === -1) {
+                        row.style.display = 'none';
+                        continue;
+                    }
+                }
+                
                 // البحث في جميع خلايا الصف
                 for (let j = 0; j < cells.length; j++) {
                     const cellText = cells[j].textContent.toLowerCase();
@@ -1326,6 +1742,41 @@
                 }
                 
                 row.style.display = found ? '' : 'none';
+            }
+        }
+
+        function filterUsers() {
+            const searchText = document.getElementById('searchUsers').value.toLowerCase();
+            const departmentFilter = document.getElementById('userDepartmentFilter').value;
+            const statusFilter = document.getElementById('userStatusFilter').value;
+            const container = document.getElementById('usersContainer');
+            const cards = container.getElementsByClassName('user-card');
+            
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const cardText = card.textContent.toLowerCase();
+                const department = card.querySelector('.card-text').textContent;
+                const status = card.querySelector('.badge').textContent;
+                
+                // تطبيق فلتر القسم
+                if (departmentFilter && department.indexOf(departmentFilter) === -1) {
+                    card.parentElement.style.display = 'none';
+                    continue;
+                }
+                
+                // تطبيق فلتر الحالة
+                if (statusFilter && status !== statusFilter) {
+                    card.parentElement.style.display = 'none';
+                    continue;
+                }
+                
+                // تطبيق بحث النص
+                if (searchText && cardText.indexOf(searchText) === -1) {
+                    card.parentElement.style.display = 'none';
+                    continue;
+                }
+                
+                card.parentElement.style.display = '';
             }
         }
 
@@ -1359,21 +1810,36 @@
 
         // وظائف الإضافة
         function addDevice() {
+            const name = document.getElementById('deviceName').value;
             const type = document.getElementById('deviceType').value;
             const brand = document.getElementById('deviceBrand').value;
             const model = document.getElementById('deviceModel').value;
             const serial = document.getElementById('deviceSerial').value;
-            const label = document.getElementById('deviceLabel').value;
             const ip = document.getElementById('deviceIP').value;
             const mac = document.getElementById('deviceMAC').value;
+            const location = document.getElementById('deviceLocation').value;
+            const osStatus = document.getElementById('osStatus').value;
+            const antivirusStatus = document.getElementById('antivirusStatus').value;
             const status = document.getElementById('deviceStatus').value;
+            const supplier = document.getElementById('deviceSupplier').value;
             const notes = document.getElementById('deviceNotes').value;
+            
+            // جمع المكونات المحددة
+            const components = [];
+            if (document.getElementById('componentMouse').checked) components.push('فأرة');
+            if (document.getElementById('componentKeyboard').checked) components.push('لوحة مفاتيح');
+            if (document.getElementById('componentMonitor').checked) components.push('شاشة');
+            if (document.getElementById('componentCPU').checked) components.push('وحدة مركزية');
+            if (document.getElementById('componentChair').checked) components.push('كرسي');
+            if (document.getElementById('componentTable').checked) components.push('طاولة');
+            if (document.getElementById('componentAdapter').checked) components.push('محول الشبكة');
             
             const data = getData();
             const newDevice = {
                 id: Math.max(...data.devices.map(d => d.id)) + 1,
-                type, brand, model, serial, label,
-                user: '', ip, mac, status, notes
+                name, type, brand, model, serial, components,
+                user: '', location, ip, mac, osStatus, antivirusStatus,
+                status, supplier, notes
             };
             
             data.devices.push(newDevice);
@@ -1388,6 +1854,34 @@
             
             // إظهار رسالة نجاح
             alert('تم إضافة الجهاز بنجاح!');
+        }
+
+        function addUser() {
+            const fullName = document.getElementById('userFullName').value;
+            const job = document.getElementById('userJob').value;
+            const registrationNumber = document.getElementById('userRegistrationNumber').value;
+            const department = document.getElementById('userDepartment').value;
+            const status = document.getElementById('userStatus').value;
+            const notes = document.getElementById('userNotes').value;
+            
+            const data = getData();
+            const newUser = {
+                id: Math.max(...data.users.map(u => u.id)) + 1,
+                fullName, job, registrationNumber, department, status, notes
+            };
+            
+            data.users.push(newUser);
+            saveData(data);
+            
+            // إعادة تعبئة القوائم
+            populateUsersContainer();
+            populateUserSelect();
+            
+            // إغلاق النموذج
+            bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+            
+            // إظهار رسالة نجاح
+            alert('تم إضافة المستخدم بنجاح!');
         }
 
         function addDistribution() {
@@ -1407,7 +1901,7 @@
                 };
                 
                 // تحديث المستخدم في الجهاز
-                device.user = user.name;
+                device.user = user.fullName;
                 
                 data.distributions.push(newDistribution);
                 saveData(data);
