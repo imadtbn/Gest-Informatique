@@ -3,351 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام تسيير حظيرة الإعلام الآلي - محسّن</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <title>نظام تسيير حظيرة الإعلام الآلي</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #274472;
-            --secondary-color: #5885AF;
-            --accent-color: #D7263D;
-            --light-color: #F4F6F8;
-            --sidebar-width: 210px;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
         }
-        body { background: var(--light-color); }
-        .navbar-custom { background: var(--primary-color); }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .navbar-custom {
+            background-color: var(--primary-color);
+        }
+        
         .sidebar {
-            background: var(--primary-color);
-            min-height: 100vh;
-            width: var(--sidebar-width);
-            position: fixed;
-            top: 0; right: 0;
-            color: #fff;
-            padding-top: 60px;
+            background-color: var(--dark-color);
+            color: white;
+            height: calc(100vh - 56px);
+            position: sticky;
+            top: 56px;
+            overflow-y: auto;
         }
+        
         .sidebar .nav-link {
-            color: #fff; opacity: 0.85; border-radius: 0 25px 25px 0; margin-bottom: 6px;
-            transition: background .2s;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
         }
-        .sidebar .nav-link.active,
-        .sidebar .nav-link:hover { background: var(--secondary-color); color: #fff; opacity: 1;}
-        .main-content { margin-right: var(--sidebar-width); padding: 2rem 1rem;}
+        
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+        
+        .card-custom {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card-custom:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-custom {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-custom:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+        
+        .btn-maintenance {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-maintenance:hover {
+            background-color: #c0392b;
+            color: white;
+        }
+        
+        .table-custom th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .search-box {
+            border-radius: 20px;
+            border: 1px solid #ced4da;
+            padding: 0.375rem 0.75rem;
+        }
+        
         .stat-box {
             background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-            color: #fff; border-radius: 10px; padding: 16px; text-align: center;
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
-        .table-custom th { background: var(--primary-color); color: #fff;}
-        .btn-custom { background: var(--secondary-color); color: #fff;}
-        .btn-custom:hover { background: #43698d; color: #fff;}
-        .btn-maintenance { background: var(--accent-color); color: #fff;}
-        .btn-maintenance:hover { background: #a11e2c;}
-        .toast-container { position: fixed; bottom: 1rem; left: 1rem; z-index: 9999;}
-        @media (max-width: 991px) {
-            .sidebar { position: static; width: 100%; min-height: auto; padding-top: 0;}
-            .main-content { margin-right: 0;}
+        
+        .accessory-item {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .settings-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .network-item {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .document-item {
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .print-section {
+                display: block !important;
+            }
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        #loginPage {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-laptop-house me-2"></i> نظام الحظيرة
-            </a>
+    <!-- صفحة تسجيل الدخول -->
+    <div id="loginPage">
+        <div class="login-container">
+            <div class="text-center mb-4">
+                <i class="fas fa-laptop-house fa-3x mb-3" style="color: var(--primary-color);"></i>
+                <h3>نظام تسيير حظيرة الإعلام الآلي</h3>
+                <p class="text-muted">يجب تسجيل الدخول للوصول إلى النظام</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="username" class="form-label">اسم المستخدم</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">كلمة المرور</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">تذكرني</label>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">تسجيل الدخول</button>
+            </form>
+            
+            <div class="mt-3 text-center">
+                <p class="text-muted">بيانات الدخول الافتراضية: admin / admin123</p>
+            </div>
         </div>
-    </nav>
-
-    <!-- Sidebar -->
-    <div class="sidebar d-none d-lg-block">
-        <ul class="nav flex-column">
-            <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-home me-2"></i> لوحة التحكم</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-users me-2"></i> العمال</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-desktop me-2"></i> الأجهزة</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-tools me-2"></i> الصيانة</a></li>
-        </ul>
     </div>
 
-    <!-- Main Content -->
+    <!-- المحتوى الرئيسي بعد تسجيل الدخول -->
     <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>لوحة التحكم</h2>
-            <div>
-                <button class="btn btn-custom me-2" data-bs-toggle="modal" data-bs-target="#addEmployeeModal"><i class="fas fa-user-plus"></i></button>
-                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addDeviceModal"><i class="fas fa-desktop"></i></button>
-            </div>
-        </div>
-        <!-- Stats -->
-        <div class="row mb-4">
-            <div class="col-md-3"><div class="stat-box"><h4 id="employees-count">0</h4><p>العمال</p></div></div>
-            <div class="col-md-3"><div class="stat-box"><h4 id="devices-count">0</h4><p>الأجهزة</p></div></div>
-            <div class="col-md-3"><div class="stat-box"><h4 id="maintenance-count">0</h4><p>تحت الصيانة</p></div></div>
-            <div class="col-md-3"><div class="stat-box"><h4 id="requests-count">0</h4><p>طلبات جديدة</p></div></div>
-        </div>
-        <!-- Search and Actions -->
-        <div class="card mb-4">
-            <div class="card-body row">
-                <div class="col-md-8">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="search-input" placeholder="بحث عام...">
-                        <button class="btn btn-custom" id="search-btn"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-                <div class="col-md-4 text-start">
-                    <button class="btn btn-success me-2" id="export-btn"><i class="fas fa-file-excel"></i></button>
-                    <button class="btn btn-primary me-2" id="print-btn"><i class="fas fa-print"></i></button>
-                    <button class="btn btn-secondary" id="save-btn" disabled><i class="fas fa-save"></i></button>
+        <!-- شريط التنقل -->
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-laptop-house me-2"></i>
+                    نظام تسيير حظيرة الإعلام الآلي
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i> <span id="currentUser">مسؤول</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-tab="settings"><i class="fas fa-cog me-2"></i> الإعدادات</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <!-- Employees Table -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-users me-2"></i> العمال</h5>
-                <span class="badge bg-light text-dark" id="employees-badge">0</span>
-            </div>
-            <div class="card-body table-responsive">
-                <table class="table table-bordered table-hover table-custom" id="employees-table">
-                    <thead>
-                        <tr>
-                            <th>الاسم</th>
-                            <th>الوظيفة</th>
-                            <th>المصلحة</th>
-                            <th>الجهاز</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- ديناميكياً --></tbody>
-                </table>
-            </div>
-        </div>
-        <!-- Devices Table -->
-        <div class="card">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-desktop me-2"></i> الأجهزة</h5>
-                <span class="badge bg-light text-dark" id="devices-badge">0</span>
-            </div>
-            <div class="card-body table-responsive">
-                <table class="table table-bordered table-hover table-custom" id="devices-table">
-                    <thead>
-                        <tr>
-                            <th>الاسم</th>
-                            <th>الرقم التسلسلي</th>
-                            <th>المستخدم</th>
-                            <th>الحالة</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- ديناميكياً --></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+        </nav>
 
-    <!-- Toast Container -->
-    <div class="toast-container"></div>
-
-    <!-- Employee Modal -->
-    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="employee-form" autocomplete="off">
-                <div class="modal-header">
-                    <h5 class="modal-title">إضافة عامل</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body row g-2">
-                    <div class="col-12">
-                        <label class="form-label">الاسم الكامل *</label>
-                        <input type="text" class="form-control" id="employee-name" required>
-                        <div class="invalid-feedback">الاسم مطلوب</div>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">الوظيفة *</label>
-                        <input type="text" class="form-control" id="employee-job" required>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">المصلحة *</label>
-                        <input type="text" class="form-control" id="employee-department" required>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">الجهاز</label>
-                        <input type="text" class="form-control" id="employee-computer">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- الشريط الجانبي -->
+                <div class="col-lg-2 col-md-3 p-0 no-print">
+                    <div class="sidebar">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" data-tab="dashboard">
+                                    <i class="fas fa-home me-2"></i> لوحة التحكم
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="employees">
+                                    <i class="fas fa-users me-2"></i> إدارة العمال
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="devices">
+                                    <i class="fas fa-desktop me-2"></i> إدارة الأجهزة
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="accessories">
+                                    <i class="fas fa-print me-2"></i> إدارة الملحقات
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="documents">
+                                    <i class="fas fa-file-contract me-2"></i> وثائق التسليم
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="maintenance">
+                                    <i class="fas fa-tools me-2"></i> طلبات الصيانة
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="network">
+                                    <i class="fas fa-network-wired me-2"></i> إدارة الشبكة
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="reports">
+                                    <i class="fas fa-chart-bar me-2"></i> التقارير والإحصائيات
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-custom">حفظ</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Device Modal -->
-    <div class="modal fade" id="addDeviceModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="device-form" autocomplete="off">
-                <div class="modal-header">
-                    <h5 class="modal-title">إضافة جهاز</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body row g-2">
-                    <div class="col-12">
-                        <label>اسم الجهاز *</label>
-                        <input type="text" class="form-control" id="device-name" required>
+                <!-- المحتوى الرئيسي -->
+                <div class="col-lg-10 col-md-9 py-4">
+                    <!-- لوحة التحكم -->
+                    <div class="tab-content active" id="dashboard">
+                        <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+                            <h2>لوحة التحكم الرئيسية</h2>
+                            <div>
+                                <button class="btn btn-custom me-2" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                                    <i class="fas fa-user-plus me-1"></i> إضافة عامل
+                                </button>
+                                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+                                    <i class="fas fa-desktop me-1"></i> إضافة جهاز
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- إحصائيات سريعة -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="stat-box text-center">
+                                    <h3 id="employees-count">0</h3>
+                                    <p>عدد العمال</p>
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-box text-center">
+                                    <h3 id="devices-count">0</h3>
+                                    <p>عدد الأجهزة</p>
+                                    <i class="fas fa-desktop fa-2x"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-box text-center">
+                                    <h3 id="maintenance-count">0</h3>
+                                    <p>أجهزة تحت الصيانة</p>
+                                    <i class="fas fa-tools fa-2x"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-box text-center">
+                                    <h3 id="requests-count">0</h3>
+                                    <p>طلبات جديدة</p>
+                                    <i class="fas fa-file-alt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- نشاط حديث -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card card-custom mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-history me-2"></i> آخر الحركات</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="list-group">
+                                            <div class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>تم إضافة جهاز جديد</span>
+                                                    <small class="text-muted">منذ 5 دقائق</small>
+                                                </div>
+                                                <small class="text-muted">PC-078 بواسطة أحمد</small>
+                                            </div>
+                                            <div class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>طلب صيانة جديد</span>
+                                                    <small class="text-muted">منذ ساعة</small>
+                                                </div>
+                                                <small class="text-muted">جهاز PC-042 بواسطة فاطمة</small>
+                                            </div>
+                                            <div class="list-group-item">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>تسليم وثيقة جديدة</span>
+                                                    <small class="text-muted">منذ 3 ساعات</small>
+                                                </div>
+                                                <small class="text-muted">لمصلحة الموارد البشرية</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card card-custom mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-tasks me-2"></i> المهام العاجلة</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="list-group">
+                                            <div class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <input class="form-check-input me-2" type="checkbox">
+                                                        <span>مراجعة طلبات الصيانة</span>
+                                                    </div>
+                                                    <span class="badge bg-warning">عاجل</span>
+                                                </div>
+                                            </div>
+                                            <div class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <input class="form-check-input me-2" type="checkbox">
+                                                        <span>تحديث سجلات الأجهزة</span>
+                                                    </div>
+                                                    <span class="badge bg-info">متوسط</span>
+                                                </div>
+                                            </div>
+                                            <div class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <input class="form-check-input me-2" type="checkbox">
+                                                        <span>إعداد تقرير شهري</span>
+                                                    </div>
+                                                    <span class="badge bg-secondary">منخفض</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <label>الرقم التسلسلي *</label>
-                        <input type="text" class="form-control" id="device-serial" required>
-                    </div>
-                    <div class="col-12">
-                        <label>المستخدم</label>
-                        <input type="text" class="form-control" id="device-user">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-custom">حفظ</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // بيانات افتراضية
-        let employees = [{name:"أحمد", job:"مسؤول", department:"الموارد", computer:"PC-1"}];
-        let devices = [{name:"PC-1", serial:"1000", user:"أحمد", status:"يعمل"}];
-        let changed = false;
+                    <!-- إدارة العمال -->
+                    <div class="tab-content" id="employees">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-users me-2"></i> إدارة العمال</h2>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                                <i class="fas fa-user-plus me-1"></i> إضافة عامل
+                            </button>
+                        </div>
 
-        function showToast(message, type='success') {
-            const toast = $(`
-                <div class="toast align-items-center text-bg-${type} border-0 show mb-2" role="alert">
-                  <div class="d-flex">
-                    <div class="toast-body">${message}</div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-                  </div>
-                </div>
-            `);
-            $('.toast-container').append(toast);
-            setTimeout(()=>toast.remove(), 3000);
-        }
-
-        function refreshTables() {
-            // الموظفون
-            let rows = '';
-            employees.forEach((e, i) => {
-                rows += `<tr>
-                    <td>${e.name}</td>
-                    <td>${e.job}</td>
-                    <td>${e.department}</td>
-                    <td>${e.computer||'لا يوجد'}</td>
-                    <td><button class="btn btn-sm btn-custom" onclick="removeEmployee(${i})"><i class="fas fa-trash"></i></button></td>
-                </tr>`;
-            });
-            $('#employees-table tbody').html(rows);
-            $('#employees-badge, #employees-count').text(employees.length);
-
-            // الأجهزة
-            let drows = '';
-            devices.forEach((d, i) => {
-                drows += `<tr>
-                    <td>${d.name}</td>
-                    <td>${d.serial}</td>
-                    <td>${d.user||'لا يوجد'}</td>
-                    <td><span class="badge bg-${d.status==='يعمل'?'success':'warning'}">${d.status}</span></td>
-                    <td><button class="btn btn-sm btn-custom" onclick="removeDevice(${i})"><i class="fas fa-trash"></i></button></td>
-                </tr>`;
-            });
-            $('#devices-table tbody').html(drows);
-            $('#devices-badge, #devices-count').text(devices.length);
-
-            // الإحصائيات
-            $('#maintenance-count').text(devices.filter(x=>x.status!=='يعمل').length);
-            $('#requests-count').text(0);
-        }
-
-        // إزالة موظف
-        function removeEmployee(idx) {
-            employees.splice(idx,1); changed = true; refreshTables(); $('#save-btn').prop('disabled',false);
-            showToast('تم حذف الموظف','danger');
-        }
-        // إزالة جهاز
-        function removeDevice(idx) {
-            devices.splice(idx,1); changed = true; refreshTables(); $('#save-btn').prop('disabled',false);
-            showToast('تم حذف الجهاز','danger');
-        }
-
-        // تحقق فوري من الحقول المطلوبة
-        $('form input[required]').on('input', function() {
-            $(this).toggleClass('is-invalid', !this.value);
-        });
-
-        // إضافة موظف
-        $('#employee-form').on('submit', function(e){
-            e.preventDefault();
-            employees.push({
-                name: $('#employee-name').val(),
-                job: $('#employee-job').val(),
-                department: $('#employee-department').val(),
-                computer: $('#employee-computer').val()
-            });
-            changed = true;
-            refreshTables();
-            $('#addEmployeeModal').modal('hide');
-            showToast('تم إضافة الموظف بنجاح');
-            $('#save-btn').prop('disabled',false);
-            this.reset();
-        });
-
-        // إضافة جهاز
-        $('#device-form').on('submit', function(e){
-            e.preventDefault();
-            devices.push({
-                name: $('#device-name').val(),
-                serial: $('#device-serial').val(),
-                user: $('#device-user').val(),
-                status: 'يعمل'
-            });
-            changed = true;
-            refreshTables();
-            $('#addDeviceModal').modal('hide');
-            showToast('تم إضافة الجهاز بنجاح');
-            $('#save-btn').prop('disabled',false);
-            this.reset();
-        });
-
-        // تفعيل زر حفظ عند أي تغيير
-        $('form input, form select').on('input change', function(){ $('#save-btn').prop('disabled',false); changed=true; });
-
-        // البحث
-        $('#search-btn').click(function(){
-            const txt = $('#search-input').val().trim().toLowerCase();
-            $('#employees-table tbody tr, #devices-table tbody tr').each(function(){
-                $(this).toggle($(this).text().toLowerCase().includes(txt));
-            });
-        });
-
-        // زر طباعة
-        $('#print-btn').click(()=>window.print());
-
-        // زر تصدير (فارغ تجميلياً)
-        $('#export-btn').click(()=>showToast('ميزة التصدير غير مفعلة في هذا النموذج','warning'));
-
-        // زر حفظ
-        $('#save-btn').click(function(){
-            localStorage.setItem('employees', JSON.stringify(employees));
-            localStorage.setItem('devices', JSON.stringify(devices));
-            showToast('تم حفظ البيانات بنجاح');
-            changed = false; $(this).prop('disabled',true);
-        });
-
-        // تحميل بيانات سابقاً
-        $(function(){
-            employees = JSON.parse(localStorage.getItem('employees')) || employees;
-            devices   = JSON.parse(localStorage.getItem('devices')) || devices;
-            refreshTables();
-        });
-    </script>
-</body>
-</html>
+                        <!-- شريط البحث والأزرار -->
+                        <div class="card card-custom mb-4 no-print">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control search-box" id="employee-search" placeholder="ابحث في بيانات العمال...">
+                                            <button class="btn btn-custom" id="employee-search-btn">
+                                                <i class="fas fa-search"></i> بحث
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-left">
+                                        <button class="btn btn-success me-2" id="export-employees-btn">
+                                            <i class="fas fa-file-excel me-1"></i> تصدير إكسيل
+                                  
