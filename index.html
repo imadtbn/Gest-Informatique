@@ -431,4 +431,976 @@
                                     <div class="col-md-4 text-left">
                                         <button class="btn btn-success me-2" id="export-employees-btn">
                                             <i class="fas fa-file-excel me-1"></i> تصدير إكسيل
-                                  
+                                        </button>
+                                        <button class="btn btn-primary me-2" onclick="window.print()">
+                                            <i class="fas fa-print me-1"></i> طباعة
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- جدول العمال -->
+                        <div class="card card-custom mb-4">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-users me-2"></i> قائمة العمال</h5>
+                                <span class="badge bg-light text-dark" id="employees-badge">0</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover" id="employees-table">
+                                        <thead>
+                                            <tr>
+                                                <th>رقم التسجيل</th>
+                                                <th>الاسم الكامل</th>
+                                                <th>الوظيفة</th>
+                                                <th>المصلحة</th>
+                                                <th>جهاز الكمبيوتر</th>
+                                                <th>الاختصاص</th>
+                                                <th>الإجراءات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- سيتم ملؤها ديناميكياً -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- إدارة الأجهزة -->
+                    <div class="tab-content" id="devices">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-desktop me-2"></i> إدارة الأجهزة</h2>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+                                <i class="fas fa-desktop me-1"></i> إضافة جهاز
+                            </button>
+                        </div>
+
+                        <!-- شريط البحث والأزرار -->
+                        <div class="card card-custom mb-4 no-print">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control search-box" id="device-search" placeholder="ابحث في بيانات الأجهزة...">
+                                            <button class="btn btn-custom" id="device-search-btn">
+                                                <i class="fas fa-search"></i> بحث
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-left">
+                                        <button class="btn btn-success me-2" id="export-devices-btn">
+                                            <i class="fas fa-file-excel me-1"></i> تصدير إكسيل
+                                        </button>
+                                        <button class="btn btn-primary me-2" onclick="window.print()">
+                                            <i class="fas fa-print me-1"></i> طباعة
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- جدول الأجهزة -->
+                        <div class="card card-custom">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-desktop me-2"></i> قائمة الأجهزة</h5>
+                                <span class="badge bg-light text-dark" id="devices-badge">0</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover" id="devices-table">
+                                        <thead>
+                                            <tr>
+                                                <th>اسم الجهاز</th>
+                                                <th>الرقم التسلسلي</th>
+                                                <th>العلامة</th>
+                                                <th>الطراز</th>
+                                                <th>المستخدم</th>
+                                                <th>عنوان IP</th>
+                                                <th>عنوان MAC</th>
+                                                <th>الحالة</th>
+                                                <th>الإجراءات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- سيتم ملؤها ديناميكياً -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- باقي التبويبات سيتم إضافتها هنا -->
+                    <!-- إدارة الملحقات -->
+                    <div class="tab-content" id="accessories">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-print me-2"></i> إدارة الملحقات</h2>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addAccessoryModal">
+                                <i class="fas fa-plus me-1"></i> إضافة ملحق
+                            </button>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> هذه الصفحة تحت التطوير. سيتم إضافة محتوى إدارة الملحقات قريباً.
+                        </div>
+                    </div>
+
+                    <!-- وثائق التسليم -->
+                    <div class="tab-content" id="documents">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-file-contract me-2"></i> وثائق التسليم</h2>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
+                                <i class="fas fa-plus me-1"></i> إضافة وثيقة
+                            </button>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> هذه الصفحة تحت التطوير. سيتم إضافة محتوى وثائق التسليم قريباً.
+                        </div>
+                    </div>
+
+                    <!-- طلبات الصيانة -->
+                    <div class="tab-content" id="maintenance">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-tools me-2"></i> طلبات الصيانة</h2>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMaintenanceModal">
+                                <i class="fas fa-plus me-1"></i> طلب صيانة جديد
+                            </button>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> هذه الصفحة تحت التطوير. سيتم إضافة محتوى طلبات الصيانة قريباً.
+                        </div>
+                    </div>
+
+                    <!-- إدارة الشبكة -->
+                    <div class="tab-content" id="network">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-network-wired me-2"></i> إدارة الشبكة</h2>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addNetworkModal">
+                                <i class="fas fa-plus me-1"></i> إضافة جهاز شبكة
+                            </button>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> هذه الصفحة تحت التطوير. سيتم إضافة محتوى إدارة الشبكة قريباً.
+                        </div>
+                    </div>
+
+                    <!-- التقارير والإحصائيات -->
+                    <div class="tab-content" id="reports">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-chart-bar me-2"></i> التقارير والإحصائيات</h2>
+                            <button class="btn btn-custom">
+                                <i class="fas fa-download me-1"></i> تحميل التقارير
+                            </button>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> هذه الصفحة تحت التطوير. سيتم إضافة محتوى التقارير والإحصائيات قريباً.
+                        </div>
+                    </div>
+
+                    <!-- الإعدادات -->
+                    <div class="tab-content" id="settings">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-cog me-2"></i> الإعدادات</h2>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="settings-panel mb-4">
+                                    <h4 class="mb-4"><i class="fas fa-user-cog me-2"></i> إعدادات الحساب</h4>
+                                    <form id="account-settings">
+                                        <div class="mb-3">
+                                            <label class="form-label">اسم المستخدم</label>
+                                            <input type="text" class="form-control" value="admin" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">كلمة المرور الحالية</label>
+                                            <input type="password" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">كلمة المرور الجديدة</label>
+                                            <input type="password" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">تأكيد كلمة المرور الجديدة</label>
+                                            <input type="password" class="form-control">
+                                        </div>
+                                        <button type="submit" class="btn btn-custom">حفظ التغييرات</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="settings-panel mb-4">
+                                    <h4 class="mb-4"><i class="fas fa-sliders-h me-2"></i> إعدادات النظام</h4>
+                                    <form id="system-settings">
+                                        <div class="mb-3">
+                                            <label class="form-label">اسم المؤسسة</label>
+                                            <input type="text" class="form-control" value="الإدارة المحلية">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">تنسيق التاريخ</label>
+                                            <select class="form-select">
+                                                <option selected>يوم/شهر/سنة</option>
+                                                <option>شهر/يوم/سنة</option>
+                                                <option>سنة/شهر/يوم</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="notifications" checked>
+                                            <label class="form-check-label" for="notifications">تفعيل الإشعارات</label>
+                                        </div>
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="autoSave" checked>
+                                            <label class="form-check-label" for="autoSave">الحفظ التلقائي</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-custom">حفظ الإعدادات</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة عامل (Modal) -->
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة عامل جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="employee-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الاسم الكامل *</label>
+                                    <input type="text" class="form-control" id="employee-name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">رقم التسجيل *</label>
+                                    <input type="text" class="form-control" id="employee-id" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الوظيفة *</label>
+                                    <input type="text" class="form-control" id="employee-job" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">المصلحة *</label>
+                                    <select class="form-select" id="employee-department" required>
+                                        <option value="" selected disabled>اختر المصلحة...</option>
+                                        <option>مصلحة الموارد البشرية</option>
+                                        <option>مصلحة الشؤون القانونية</option>
+                                        <option>مصلحة المعلوماتية</option>
+                                        <option>مصلحة المالية</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">جهاز الكمبيوتر</label>
+                                    <select class="form-select" id="employee-computer">
+                                        <option value="" selected>لا يوجد</option>
+                                        <!-- سيتم ملؤها ديناميكياً -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الاختصاص</label>
+                                    <input type="text" class="form-control" id="employee-specialty">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الشهادات المتحصل عليها</label>
+                            <textarea class="form-control" id="employee-certificates" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-custom" id="save-employee-btn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة جهاز (Modal) -->
+    <div class="modal fade" id="addDeviceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة جهاز جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="device-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">اسم الجهاز *</label>
+                                    <input type="text" class="form-control" id="device-name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الرقم التسلسلي *</label>
+                                    <input type="text" class="form-control" id="device-serial" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">العلامة *</label>
+                                    <input type="text" class="form-control" id="device-brand" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الطراز *</label>
+                                    <input type="text" class="form-control" id="device-model" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">عنوان IP</label>
+                                    <input type="text" class="form-control" id="device-ip">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">عنوان MAC</label>
+                                    <input type="text" class="form-control" id="device-mac">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">المستخدم</label>
+                            <select class="form-select" id="device-user">
+                                <option value="" selected>لا يوجد</option>
+                                <!-- سيتم ملؤها ديناميكياً -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الملحقات</label>
+                            <div id="accessories-container">
+                                <!-- سيتم إضافة الملحقات هنا -->
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="add-accessory-btn">
+                                <i class="fas fa-plus me-1"></i> إضافة ملحق
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-custom" id="save-device-btn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج الصيانة (Modal) -->
+    <div class="modal fade" id="maintenanceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">طلب صيانة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="maintenance-form">
+                        <div class="mb-3">
+                            <label class="form-label">اسم الجهاز/الملحق</label>
+                            <input type="text" class="form-control" id="maintenance-item" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الرقم التسلسلي</label>
+                            <input type="text" class="form-control" id="maintenance-serial" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">سبب العطل *</label>
+                            <textarea class="form-control" id="maintenance-reason" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ورشة التصليح *</label>
+                            <select class="form-select" id="maintenance-workshop" required>
+                                <option value="" selected disabled>اختر ورشة التصليح...</option>
+                                <option>الورشة المركزية</option>
+                                <option>الورشة الخارجية - تقنيات</option>
+                                <option>الورشة الخارجية - ديجيتال</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-maintenance" id="save-maintenance-btn">إرسال الطلب</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- مكتبة لتصدير البيانات إلى Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <script>
+        // بيانات التخزين
+        let employees = JSON.parse(localStorage.getItem('employees')) || [];
+        let devices = JSON.parse(localStorage.getItem('devices')) || [];
+        let maintenanceRequests = JSON.parse(localStorage.getItem('maintenanceRequests')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+        // عناصر واجهة المستخدم
+        const employeeForm = document.getElementById('employee-form');
+        const deviceForm = document.getElementById('device-form');
+        const maintenanceForm = document.getElementById('maintenance-form');
+        
+        // تهيئة النظام عند التحميل
+        $(document).ready(function() {
+            // التحقق من تسجيل الدخول
+            if (currentUser) {
+                showMainContent();
+            } else {
+                $('#loginPage').show();
+                $('.main-content').hide();
+            }
+            
+            // تفعيل تسجيل الدخول
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+                const username = $('#username').val();
+                const password = $('#password').val();
+                
+                // تحقق بسيط من بيانات الدخول
+                if (username === 'admin' && password === 'admin123') {
+                    currentUser = { username: username, name: 'مسؤول النظام' };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showMainContent();
+                    $('#currentUser').text(currentUser.name);
+                } else {
+                    alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+                }
+            });
+            
+            // تسجيل الخروج
+            $('#logoutBtn').click(function() {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                $('#loginPage').show();
+                $('.main-content').hide();
+                $('#loginForm')[0].reset();
+            });
+            
+            // تفعيل التنقل بين التبويبات
+            $('.sidebar .nav-link').click(function(e) {
+                e.preventDefault();
+                const tabId = $(this).data('tab');
+                
+                // تحديد التبويب النشط
+                $('.sidebar .nav-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // إظهار المحتوى المناسب
+                $('.tab-content').removeClass('active');
+                $(`#${tabId}`).addClass('active');
+            });
+            
+            // تفعيل التنقل من القائمة المنسدلة
+            $('.dropdown-item[data-tab]').click(function(e) {
+                e.preventDefault();
+                const tabId = $(this).data('tab');
+                
+                // تحديد التبويب النشط
+                $('.sidebar .nav-link').removeClass('active');
+                $(`.sidebar .nav-link[data-tab="${tabId}"]`).addClass('active');
+                
+                // إظهار المحتوى المناسب
+                $('.tab-content').removeClass('active');
+                $(`#${tabId}`).addClass('active');
+            });
+            
+            // تهيئة المكونات إذا كان المستخدم مسجلاً
+            if (currentUser) {
+                initComponents();
+            }
+        });
+
+        function showMainContent() {
+            $('#loginPage').hide();
+            $('.main-content').show();
+            initComponents();
+        }
+
+        function initComponents() {
+            updateComputerDropdown();
+            updateUserDropdown();
+            loadEmployees();
+            loadDevices();
+            updateStats();
+            
+            // تفعيل زر حفظ العامل
+            $('#save-employee-btn').click(function() {
+                if ($('#employee-form')[0].checkValidity()) {
+                    saveEmployee();
+                    $('#addEmployeeModal').modal('hide');
+                } else {
+                    $('#employee-form')[0].reportValidity();
+                }
+            });
+            
+            // تفعيل زر حفظ الجهاز
+            $('#save-device-btn').click(function() {
+                if ($('#device-form')[0].checkValidity()) {
+                    saveDevice();
+                    $('#addDeviceModal').modal('hide');
+                } else {
+                    $('#device-form')[0].reportValidity();
+                }
+            });
+            
+            // تفعيل زر إضافة ملحق
+            $('#add-accessory-btn').click(function() {
+                addAccessoryField();
+            });
+            
+            // تفعيل زر البحث في العمال
+            $('#employee-search-btn').click(function() {
+                searchEmployees();
+            });
+            
+            // تفعيل زر البحث في الأجهزة
+            $('#device-search-btn').click(function() {
+                searchDevices();
+            });
+            
+            // تفعيل زر التصدير للعمال
+            $('#export-employees-btn').click(function() {
+                exportToExcel(employees, 'الموظفون');
+            });
+            
+            // تفعيل زر التصدير للأجهزة
+            $('#export-devices-btn').click(function() {
+                exportToExcel(devices, 'الأجهزة');
+            });
+            
+            // إضافة بعض البيانات الافتراضية إذا لم تكن هناك بيانات
+            if (employees.length === 0 && devices.length === 0) {
+                addSampleData();
+            }
+        }
+
+        // وظائف النظام
+        function saveEmployee() {
+            const employee = {
+                id: $('#employee-id').val(),
+                name: $('#employee-name').val(),
+                job: $('#employee-job').val(),
+                department: $('#employee-department').val(),
+                computer: $('#employee-computer').val(),
+                specialty: $('#employee-specialty').val(),
+                certificates: $('#employee-certificates').val()
+            };
+            
+            employees.push(employee);
+            saveData();
+            loadEmployees();
+            updateStats();
+            employeeForm.reset();
+        }
+
+        function saveDevice() {
+            const accessories = [];
+            $('.accessory-item').each(function() {
+                const type = $(this).find('.accessory-type').val();
+                const serial = $(this).find('.accessory-serial').val();
+                const brand = $(this).find('.accessory-brand').val();
+                const model = $(this).find('.accessory-model').val();
+                
+                if (type && serial) {
+                    accessories.push({ type, serial, brand, model });
+                }
+            });
+            
+            const device = {
+                name: $('#device-name').val(),
+                serial: $('#device-serial').val(),
+                brand: $('#device-brand').val(),
+                model: $('#device-model').val(),
+                ip: $('#device-ip').val(),
+                mac: $('#device-mac').val(),
+                user: $('#device-user').val(),
+                accessories: accessories,
+                status: 'يعمل'
+            };
+            
+            devices.push(device);
+            saveData();
+            loadDevices();
+            updateStats();
+            deviceForm.reset();
+            $('#accessories-container').empty();
+        }
+
+        function loadEmployees() {
+            const tableBody = $('#employees-table tbody');
+            tableBody.empty();
+            
+            employees.forEach(employee => {
+                const row = `
+                    <tr>
+                        <td>${employee.id}</td>
+                        <td>${employee.name}</td>
+                        <td>${employee.job}</td>
+                        <td>${employee.department}</td>
+                        <td>${employee.computer || 'لا يوجد'}</td>
+                        <td>${employee.specialty || 'لا يوجد'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-custom" onclick="editEmployee('${employee.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteEmployee('${employee.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-maintenance" onclick="requestMaintenance('${employee.id}', 'employee', '${employee.name}', '${employee.id}')">
+                                <i class="fas fa-tools"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+            
+            $('#employees-badge').text(employees.length);
+        }
+
+        function loadDevices() {
+            const tableBody = $('#devices-table tbody');
+            tableBody.empty();
+            
+            devices.forEach(device => {
+                const statusClass = device.status === 'يعمل' ? 'bg-success' : 'bg-warning';
+                const row = `
+                    <tr>
+                        <td>${device.name}</td>
+                        <td>${device.serial}</td>
+                        <td>${device.brand}</td>
+                        <td>${device.model}</td>
+                        <td>${device.user || 'لا يوجد'}</td>
+                        <td>${device.ip || 'لا يوجد'}</td>
+                        <td>${device.mac || 'لا يوجد'}</td>
+                        <td><span class="badge ${statusClass}">${device.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-custom" onclick="editDevice('${device.serial}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteDevice('${device.serial}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-maintenance" onclick="requestMaintenance('${device.serial}', 'device', '${device.name}', '${device.serial}')">
+                                <i class="fas fa-tools"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+            
+            $('#devices-badge').text(devices.length);
+            updateComputerDropdown();
+            updateUserDropdown();
+        }
+
+        function updateStats() {
+            $('#employees-count').text(employees.length);
+            $('#devices-count').text(devices.length);
+            $('#maintenance-count').text(devices.filter(d => d.status === 'تحت الصيانة').length);
+            $('#requests-count').text(maintenanceRequests.length);
+        }
+
+        function updateComputerDropdown() {
+            const dropdown = $('#employee-computer');
+            dropdown.empty();
+            dropdown.append('<option value="" selected>لا يوجد</option>');
+            
+            devices.forEach(device => {
+                if (!device.user) { // فقط الأجهزة التي ليس لها مستخدم
+                    dropdown.append(`<option value="${device.name}">${device.name} (${device.brand} ${device.model})</option>`);
+                }
+            });
+        }
+
+        function updateUserDropdown() {
+            const dropdown = $('#device-user');
+            dropdown.empty();
+            dropdown.append('<option value="" selected>لا يوجد</option>');
+            
+            employees.forEach(employee => {
+                dropdown.append(`<option value="${employee.name}">${employee.name} (${employee.department})</option>`);
+            });
+        }
+
+        function addAccessoryField() {
+            const accessoryHtml = `
+                <div class="accessory-item">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select class="form-select form-select-sm accessory-type">
+                                <option value="" selected disabled>نوع الملحق</option>
+                                <option>وحدة مركزية</option>
+                                <option>شاشة</option>
+                                <option>لوحة مفاتيح</option>
+                                <option>فأرة</option>
+                                <option>طابعة</option>
+                                <option>محول الشبكة</option>
+                                <option>مموج كهربائي</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm accessory-serial" placeholder>الرقم التسلسلي</input>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm accessory-brand" placeholder>العلامة</input>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm accessory-model" placeholder>الطراز</input>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('#accessories-container').append(accessoryHtml);
+        }
+
+        function requestMaintenance(id, type, name, serial) {
+            $('#maintenance-item').val(name);
+            $('#maintenance-serial').val(serial);
+            $('#maintenanceModal').data('id', id);
+            $('#maintenanceModal').data('type', type);
+            $('#maintenanceModal').modal('show');
+        }
+
+        // تفعيل زر حفظ طلب الصيانة
+        $('#save-maintenance-btn').click(function() {
+            if ($('#maintenance-form')[0].checkValidity()) {
+                const id = $('#maintenanceModal').data('id');
+                const type = $('#maintenanceModal').data('type');
+                const reason = $('#maintenance-reason').val();
+                const workshop = $('#maintenance-workshop').val();
+                
+                const request = {
+                    id: Date.now(),
+                    itemId: id,
+                    itemType: type,
+                    itemName: $('#maintenance-item').val(),
+                    itemSerial: $('#maintenance-serial').val(),
+                    reason: reason,
+                    workshop: workshop,
+                    date: new Date().toLocaleDateString('ar-EG'),
+                    status: 'معلق'
+                };
+                
+                maintenanceRequests.push(request);
+                
+                // إذا كان الطلب لجهاز، قم بتغيير حالته
+                if (type === 'device') {
+                    const device = devices.find(d => d.serial === id);
+                    if (device) {
+                        device.status = 'تحت الصيانة';
+                    }
+                }
+                
+                saveData();
+                loadDevices();
+                updateStats();
+                $('#maintenanceModal').modal('hide');
+                maintenanceForm.reset();
+                
+                alert('تم إرسال طلب الصيانة بنجاح');
+            } else {
+                $('#maintenance-form')[0].reportValidity();
+            }
+        });
+
+        function searchEmployees() {
+            const searchText = $('#employee-search').val().toLowerCase();
+            
+            $('#employees-table tbody tr').each(function() {
+                const rowText = $(this).text().toLowerCase();
+                $(this).toggle(rowText.includes(searchText));
+            });
+        }
+
+        function searchDevices() {
+            const searchText = $('#device-search').val().toLowerCase();
+            
+            $('#devices-table tbody tr').each(function() {
+                const rowText = $(this).text().toLowerCase();
+                $(this).toggle(rowText.includes(searchText));
+            });
+        }
+
+        function exportToExcel(data, sheetName) {
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, sheetName);
+            XLSX.writeFile(wb, `حظيرة_الإعلام_الآلي_${sheetName}.xlsx`);
+        }
+
+        function saveData() {
+            localStorage.setItem('employees', JSON.stringify(employees));
+            localStorage.setItem('devices', JSON.stringify(devices));
+            localStorage.setItem('maintenanceRequests', JSON.stringify(maintenanceRequests));
+        }
+
+        function addSampleData() {
+            // بيانات عمال نموذجية
+            employees = [
+                {
+                    id: 'EMP-001',
+                    name: 'أحمد محمد',
+                    job: 'مسؤول إعلام آلي',
+                    department: 'مصلحة الموارد البشرية',
+                    computer: 'PC-025',
+                    specialty: 'شبكات الحاسوب',
+                    certificates: 'شهادة تقني سامي في الإعلام الآلي'
+                },
+                {
+                    id: 'EMP-002',
+                    name: 'فاطمة الزهراء',
+                    job: 'مساعد إداري',
+                    department: 'مصلحة الشؤون القانونية',
+                    computer: 'PC-042',
+                    specialty: 'إدارة أعمال',
+                    certificates: 'شهادة تقني في الإدارة'
+                }
+            ];
+            
+            // بيانات أجهزة نموذجية
+            devices = [
+                {
+                    name: 'PC-025',
+                    serial: 'SN-789456',
+                    brand: 'Dell',
+                    model: 'Optiplex 7050',
+                    ip: '192.168.1.25',
+                    mac: '00:1A:2B:3C:4D:5E',
+                    user: 'أحمد محمد',
+                    accessories: [
+                        { type: 'شاشة', serial: 'MON-001', brand: 'Dell', model: 'P2219H' },
+                        { type: 'لوحة مفاتيح', serial: 'KB-001', brand: 'Dell', model: 'KB216' },
+                        { type: 'فأرة', serial: 'MS-001', brand: 'Dell', model: 'MS116' }
+                    ],
+                    status: 'يعمل'
+                },
+                {
+                    name: 'PC-042',
+                    serial: 'SN-123456',
+                    brand: 'HP',
+                    model: 'ProDesk 600',
+                    ip: '192.168.1.42',
+                    mac: '00:1B:2C:3D:4E:5F',
+                    user: 'فاطمة الزهراء',
+                    accessories: [
+                        { type: 'شاشة', serial: 'MON-002', brand: 'HP', model: 'E243' },
+                        { type: 'لوحة مفاتيح', serial: 'KB-002', brand: 'HP', model: 'USB Keyboard' },
+                        { type: 'فأرة', serial: 'MS-002', brand: 'HP', model: 'USB Mouse' }
+                    ],
+                    status: 'يعمل'
+                }
+            ];
+            
+            saveData();
+            loadEmployees();
+            loadDevices();
+            updateStats();
+        }
+
+        // وظائف التعديل والحذف
+        function editEmployee(id) {
+            const employee = employees.find(emp => emp.id === id);
+            if (employee) {
+                $('#employee-id').val(employee.id);
+                $('#employee-name').val(employee.name);
+                $('#employee-job').val(employee.job);
+                $('#employee-department').val(employee.department);
+                $('#employee-computer').val(employee.computer);
+                $('#employee-specialty').val(employee.specialty);
+                $('#employee-certificates').val(employee.certificates);
+                
+                $('#addEmployeeModal').modal('show');
+                
+                // حذف الموظف القديم بعد التعديل
+                deleteEmployee(id, false);
+            }
+        }
+
+        function deleteEmployee(id, confirm = true) {
+            if (!confirm || confirm('هل أنت متأكد من حذف هذا العامل؟')) {
+                employees = employees.filter(emp => emp.id !== id);
+                saveData();
+                loadEmployees();
+                updateStats();
+            }
+        }
+
+        function editDevice(serial) {
+            const device = devices.find(dev => dev.serial === serial);
+            if (device) {
+                $('#device-name').val(device.name);
+                $('#device-serial').val(device.serial);
+                $('#device-brand').val(device.brand);
+                $('#device-model').val(device.model);
+                $('#device-ip').val(device.ip);
+                $('#device-mac').val(device.mac);
+                $('#device-user').val(device.user);
+                
+                // إضافة الملحقات
+                $('#accessories-container').empty();
+                device.accessories.forEach(acc => {
+                    addAccessoryField();
+                    const lastItem = $('.accessory-item').last();
+                    lastItem.find('.accessory-type').val(acc.type);
+                    lastItem.find('.accessory-serial').val(acc.serial);
+                    lastItem.find('.accessory-brand').val(acc.brand);
+                    lastItem.find('.accessory-model').val(acc.model);
+                });
+                
+                $('#addDeviceModal').modal('show');
+                
+                // حذف الجهاز القديم بعد التعديل
+                deleteDevice(serial, false);
+            }
+        }
+
+        function deleteDevice(serial, confirm = true) {
+            if (!confirm || confirm('هل أنت متأكد من حذف هذا الجهاز؟')) {
+                devices = devices.filter(dev => dev.serial !== serial);
+                saveData();
+                loadDevices();
+                updateStats();
+            }
+        }
+    </script>
+</body>
+</html>
