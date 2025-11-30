@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر السلع الطازجة — النسخة المحسّنة</title>
+    <meta name="description" content="متجر مواد غذائية متصل بGoogle Sheets، بحث عربي، سلة ذكية، توصيل حسب المسافة.">
+    <style>
+    :root{
+        --primary:#4CAF50;
+        --accent:#FF9800;
+        --muted:#f4f4f9;
+        --danger:#e64a19;
+        --panel-bg:#fff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, 'Arial', sans-serif;background:var(--muted);color:#222;direction:rtl}
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--panel-bg);position:sticky;top:0;z-index:1200;box-shadow:0 2px 6px rgba(0,0,0,.06);gap:12px}
+    .logo{font-weight:700;color:var(--primary);font-size:20px;min-width:140px}
+    .search-bar{display:flex;flex:1;max-width:720px;gap:8px}
+    #search-input{flex:1;padding:10px;border:1px solid #e6e6e6;border-radius:8px}
+    .search-bar button{padding:10px 14px;border-radius:8px;border:none;background:var(--primary);color:#fff;cursor:pointer}
+    .cart-container{display:flex;align-items:center;gap:10px;background:#fafafa;padding:6px 10px;border-radius:10px;border:1px solid #eee}
+    .cart-total{font-weight:700;color:var(--danger)}
+    .cart-count{font-size:13px;color:#666}
+    .cart-icon{position:relative;cursor:pointer;padding:6px}
+    #cart-badge{position:absolute;top:-6px;left:-6px;background:red;color:#fff;border-radius:50%;padding:2px 6px;font-size:12px}
+
+    main{padding:20px}
+    .category-section h2{color:var(--primary);border-bottom:2px solid #eee;padding-bottom:8px;margin:26px 0 8px}
+    .product-grid{display:flex;flex-wrap:wrap;gap:18px}
+    .product-card{width:250px;background:var(--panel-bg);border-radius:10px;padding:12px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.03);text-align:center;transition:transform .18s}
+    .product-card:hover{transform:translateY(-6px)}
+    .product-card img{width:100%;height:150px;object-fit:contain;border-radius:6px;margin-bottom:8px}
+    .product-info h3{font-size:16px;margin:6px 0}
+    .price{font-weight:700;color:var(--danger);margin-top:6px}
+    .add-to-cart-btn{margin-top:10px;background:var(--accent);color:#fff;border:none;padding:10px;border-radius:8px;width:100%;cursor:pointer}
+
+    /* sidebar & overlay */
+    #overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:1100;display:none}
+    .panel{position:fixed;top:0;right:0;width:380px;height:100%;background:var(--panel-bg);box-shadow:-8px 0 24px rgba(0,0,0,.12);padding:20px;overflow:auto;z-index:1150;transform:translateX(100%);transition:transform .25s ease}
+    .panel.open{transform:translateX(0)}
+    .panel .close{background:#eee;border:none;padding:8px 10px;border-radius:6px;cursor:pointer}
+
+    /* floating cart button */
+    #floating-cart{position:fixed;bottom:20px;left:20px;background:var(--primary);color:#fff;padding:12px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.16);z-index:1300;cursor:pointer;display:none}
+
+    /* responsive */
+    @media(max-width:768px){
+        .product-card{width:100%;max-width:420px}
+        #floating-cart{display:block}
+        header{padding:10px}
+    }
+
+    footer{background:#222;color:#ddd;text-align:center;padding:18px;margin-top:30px}
+
+    /* toast */
+    #toast{position:fixed;top:24px;right:24px;background:var(--primary);color:#fff;padding:12px 16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:1400;opacity:0;transform:translateY(-6px);transition:opacity .25s,transform .25s}
+    #toast.show{opacity:1;transform:translateY(0)}
+
+    /* small admin area */
+    #admin-panel{position:fixed;bottom:20px;right:20px;background:#fff;padding:10px;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:1600}
+    #admin-panel input{width:300px;padding:8px;border:1px solid #eee;border-radius:6px}
+    #admin-panel button{margin-top:6px;padding:8px 10px;border-radius:6px;border:none;background:var(--primary);color:#fff;cursor:pointer}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">متجر السلع الطازجة</div>
+        <div class="search-bar">
+            <input id="search-input" placeholder="ابحث عن منتج، صنف أو كلمة..." />
+            <button id="search-btn">بحث</button>
+        </div>
+        <div class="cart-container">
+            <div class="cart-info">
+                <div class="cart-total" id="header-cart-total">0 دج</div>
+                <div class="cart-count" id="header-cart-count">0 منتج</div>
+            </div>
+            <div class="cart-icon" id="cart-icon" title="عرض السلة">
+                <span id="cart-badge">0</span>
+                🧺
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Products injected here -->
+        <div id="loader" style="text-align:center;padding:40px">جارٍ تحميل المنتجات...</div>
+    </main>
+
+    <div id="overlay"></div>
+
+    <aside id="cart-sidebar" class="panel" aria-hidden="true">
+        <button class="close" id="close-cart">إغلاق</button>
+        <h3>سلة المشتريات</h3>
+        <div id="cart-items" style="margin-top:12px"></div>
+        <div class="summary" style="margin-top:18px;border-top:1px dashed #eee;padding-top:12px">
+            <p>المجموع الفرعي: <strong id="sub-total">0 دج</strong></p>
+            <p>تكلفة التوصيل: <strong id="delivery-cost">0 دج</strong></p>
+            <p class="total">المجموع الكلي: <strong id="grand-total">0 دج</strong></p>
+        </div>
+        <button id="checkout-button" style="margin-top:12px;background:var(--primary);color:#fff;padding:10px;border:none;border-radius:8px;width:100%;cursor:pointer">إتمام الشراء</button>
+    </aside>
+
+    <section id="checkout-form" class="panel" style="width:380px">
+        <button class="close" id="close-checkout">إغلاق</button>
+        <h3>بيانات التوصيل</h3>
+        <input type="text" id="customer-name" placeholder="الاسم الكامل" required style="width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #eee" />
+        <input type="tel" id="customer-phone" placeholder="رقم الهاتف" required style="width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #eee" />
+        <button id="get-location-btn" style="margin-top:10px;width:100%;padding:10px;border-radius:6px;border:none;background:#2196F3;color:#fff;cursor:pointer">📍 تحديد موقعي الجغرافي</button>
+        <p id="location-status" style="color:#444;margin-top:8px"></p>
+        <p class="total">المجموع الكلي مع التوصيل: <strong id="final-total">0 دج</strong></p>
+        <button id="send-whatsapp-order" style="width:100%;padding:10px;border-radius:6px;border:none;background:#25D366;color:#fff;cursor:pointer">إرسال الطلب عبر واتساب</button>
+        <button id="back-to-cart" style="width:100%;padding:10px;border-radius:6px;border:none;background:#eee;color:#333;cursor:pointer;margin-top:8px">العودة إلى السلة</button>
+    </section>
+
+    <div id="toast"></div>
+
+    <button id="floating-cart" title="عرض السلة">🧺 سلة التسوق <span id="float-badge" style="margin-inline-start:8px;background:red;padding:2px 6px;border-radius:999px;font-size:12px">0</span></button>
+
+    <div id="admin-panel">
+        <div style="font-size:12px;color:#666">Admin: Products API</div>
+        <input id="admin-api" placeholder="URL Google Apps Script (doGet)" />
+        <div style="display:flex;gap:6px;margin-top:6px">
+            <button id="save-api">حفظ</button>
+            <button id="clear-cache" style="background:#e64a19;color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">مسح الكاش</button>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 متجر السلع الطازجة — جميع الحقوق محفوظة.
+    </footer>
+
+    <script>
+    // ======= CONFIG =======
+    const PRODUCTS_API = localStorage.getItem('admin_api_url') || '';
+    const CACHE_KEY = 'products_cache_v2';
+    const CACHE_TS_KEY = 'products_cache_ts_v2';
+    const CACHE_TTL_MS = 1000 * 60 * 10; // 10 minutes
+
+    // ثابت المتجر (مثال: الجزائر العاصمة)
+    const STORE_LAT = 36.7538;
+    const STORE_LON = 3.0588;
+
+    // حالة التطبيق
+    let products = [];
+    let cart = [];
+    let customerLocation = null;
+    let deliveryCost = 0;
+
+    // ======= Utilities =======
+    function normalizeArabic(str = ''){
+        return String(str).trim().normalize('NFKC')
+            .replace(/[ً-ْ]/g, '')
+            .replace(/[إأآ]/g,'ا')
+            .replace(/ى/g,'ي')
+            .replace(/ؤ/g,'و')
+            .replace(/ئ/g,'ي')
+            .replace(/ة/g,'ه')
+            .toLowerCase();
+    }
+
+    function showToast(text, duration = 2500){
+        const t = document.getElementById('toast');
+        t.textContent = text;
+        t.classList.add('show');
+        setTimeout(()=>t.classList.remove('show'), duration);
+    }
+
+    function formatPrice(num){
+        return Number(num || 0).toLocaleString() + ' دج';
+    }
+
+    // ======= Fetch products (from Google Apps Script / API) =======
+    async function fetchProducts(ignoreCache = false){
+        // load from cache first if exists and fresh
+        try{
+            const cached = localStorage.getItem(CACHE_KEY);
+            const ts = Number(localStorage.getItem(CACHE_TS_KEY) || 0);
+            const age = Date.now() - ts;
+            if(!ignoreCache && cached && age < CACHE_TTL_MS){
+                products = JSON.parse(cached);
+                renderProducts(products);
+            }
+        }catch(e){console.warn('cache read error', e)}
+
+        // if no API configured, use fallback
+        const api = localStorage.getItem('admin_api_url') || PRODUCTS_API;
+        if(!api){
+            console.warn('No PRODUCTS_API configured, using fallback dataset');
+            products = getFallbackProducts();
+            localStorage.setItem(CACHE_KEY, JSON.stringify(products));
+            localStorage.setItem(CACHE_TS_KEY, Date.now());
+            renderProducts(products);
+            return;
+        }
+
+        try{
+            const res = await fetch(api, { method: 'GET' });
+            if(!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+
+            // map external fields to Arabic keys used in app
+            products = (Array.isArray(data) ? data : []).map(row=>{
+                const priceNum = Number(String(row.price ?? row.سعر ?? 0).replace(/[^0-9.-]/g,'')) || 0;
+                return {
+                    id: String(row.id ?? row.ID ?? row.Id ?? '').trim() || String(Math.random()).slice(2),
+                    صنف: String(row.category ?? row.صنف ?? row.category_name ?? '').trim(),
+                    اسم: String(row.name ?? row.اسم ?? '').trim(),
+                    سعر: priceNum,
+                    كلمات_مفتاحية: String(row.keywords ?? row.كلمات_مفتاحية ?? '').trim(),
+                    صورة: String(row.image ?? row.صورة ?? '').trim() || 'https://via.placeholder.com/250x150?text=No+Image'
+                };
+            });
+
+            // cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify(products));
+            localStorage.setItem(CACHE_TS_KEY, Date.now());
+
+            renderProducts(products);
+        }catch(err){
+            console.error('fetchProducts error', err);
+            showToast('خطأ في جلب المنتجات — سيتم استخدام البيانات المحلية', 3000);
+            products = getFallbackProducts();
+            renderProducts(products);
+        }
+    }
+
+    function getFallbackProducts(){
+        return [
+            { id:'P001', صنف:'زيت المائدة', اسم:'زيت عباد الشمس 5 لتر', سعر:2500, كلمات_مفتاحية:'زيت،طبخ', صورة:'https://via.placeholder.com/250x150?text=زيت+5لتر' },
+            { id:'P002', صنف:'زيت المائدة', اسم:'زيت عباد الشمس 2 لتر', سعر:1000, كلمات_مفتاحية:'زيت،طبخ', صورة:'https://via.placeholder.com/250x150?text=زيت+2لتر' },
+            { id:'P003', صنف:'المعلبات', اسم:'علبة تونة بالزيت', سعر:150, كلمات_مفتاحية:'تونة،سمك', صورة:'https://via.placeholder.com/250x150?text=تونة' },
+            { id:'P004', صنف:'الحبوب', اسم:'أرز بسمتي 5 كغم', سعر:1200, كلمات_مفتاحية:'ارز،حبوب', صورة:'https://via.placeholder.com/250x150?text=ارز' },
+            { id:'P005', صنف:'الحبوب', اسم:'عدس أصفر 1 كغم', سعر:300, كلمات_مفتاحية:'عدس،حبوب', صورة:'https://via.placeholder.com/250x150?text=عدس' }
+        ];
+    }
+
+    // ======= Render =======
+    function renderProducts(list){
+        const main = document.getElementById('main-content');
+        main.innerHTML = '';
+        if(!list || list.length === 0){
+            main.innerHTML = '<p style="text-align:center;padding:40px;color:#666">لا توجد منتجات حالياً.</p>';
+            return;
+        }
+
+        const categories = {};
+        list.forEach(p=>{ categories[p.صنف] = categories[p.صنف] || []; categories[p.صنف].push(p); });
+
+        Object.keys(categories).forEach((cat, idx, arr)=>{
+            const section = document.createElement('section');
+            section.className = 'category-section';
+            const heading = document.createElement('h2'); heading.textContent = cat || 'عام'; section.appendChild(heading);
+
+            const grid = document.createElement('div'); grid.className = 'product-grid';
+            categories[cat].forEach(prod=>{
+                const card = document.createElement('div'); card.className = 'product-card';
+                card.innerHTML = `
+                    <img loading="lazy" src="${prod.صورة}" alt="${prod.اسم}" onerror="this.src='https://via.placeholder.com/250x150?text=No+Image'">
+                    <div class="product-info">
+                        <h3>${prod.اسم}</h3>
+                        <div style="color:#666;font-size:13px">الصنف: ${prod.صنف}</div>
+                        <div class="price">${formatPrice(prod.سعر)}</div>
+                    </div>
+                    <button class="add-to-cart-btn" data-product-id="${prod.id}">➕ أضف إلى السلة</button>
+                `;
+                grid.appendChild(card);
+            });
+
+            section.appendChild(grid);
+            main.appendChild(section);
+            if(idx < arr.length -1){ const hr = document.createElement('hr'); main.appendChild(hr); }
+        });
+
+        // attach listeners
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn=>{
+            btn.addEventListener('click', e=>{
+                const id = btn.getAttribute('data-product-id');
+                handleAddToCart(id);
+            });
+        });
+    }
+
+    // ======= Cart logic =======
+    function handleAddToCart(productId){
+        const product = products.find(p=>p.id === productId);
+        if(!product) return;
+        const existing = cart.find(i=>i.id === productId);
+        if(existing) existing.quantity += 1; else cart.push({ id:product.id, اسم:product.اسم, سعر:Number(product.سعر), quantity:1, صنف:product.صنف });
+        updateCartDisplay();
+        showToast(`تمت إضافة ${product.اسم} إلى السلة`);
+    }
+
+    function updateCartDisplay(){
+        const subTotal = cart.reduce((t,i)=>t + (Number(i.سعر) * i.quantity), 0);
+        document.getElementById('header-cart-total').textContent = formatPrice(subTotal);
+        const totalCount = cart.reduce((t,i)=>t + i.quantity, 0);
+        document.getElementById('header-cart-count').textContent = totalCount + ' منتج';
+        document.getElementById('cart-badge').textContent = totalCount;
+        document.getElementById('float-badge').textContent = totalCount;
+
+        const itemsContainer = document.getElementById('cart-items'); itemsContainer.innerHTML = '';
+        if(cart.length === 0){ itemsContainer.innerHTML = '<p>السلة فارغة</p>'; }
+        else{
+            cart.forEach(item=>{
+                const el = document.createElement('div'); el.className = 'cart-item';
+                el.style.display='flex'; el.style.justifyContent='space-between'; el.style.marginBottom='12px';
+                el.innerHTML = `
+                    <div style="flex:1">
+                        <strong>${item.اسم}</strong>
+                        <div class="quantity-control" style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                            <button class="quantity-minus" data-product-id="${item.id}">-</button>
+                            <span class="current-quantity">${item.quantity}</span>
+                            <button class="quantity-plus" data-product-id="${item.id}">+</button>
+                        </div>
+                    </div>
+                    <div style="min-width:80px;text-align:left">${formatPrice(item.سعر * item.quantity)}</div>
+                `;
+                itemsContainer.appendChild(el);
+            });
+
+            // listeners
+            document.querySelectorAll('.quantity-minus').forEach(btn=>btn.addEventListener('click', e=>{
+                const id = btn.getAttribute('data-product-id'); handleQuantityChange(id, -1);
+            }));
+            document.querySelectorAll('.quantity-plus').forEach(btn=>btn.addEventListener('click', e=>{
+                const id = btn.getAttribute('data-product-id'); handleQuantityChange(id, 1);
+            }));
+        }
+
+        document.getElementById('sub-total').textContent = formatPrice(subTotal);
+        const grandTotal = subTotal + deliveryCost;
+        document.getElementById('grand-total').textContent = formatPrice(grandTotal);
+        document.getElementById('final-total').textContent = formatPrice(grandTotal);
+        document.getElementById('delivery-cost').textContent = formatPrice(deliveryCost);
+    }
+
+    function handleQuantityChange(productId, delta){
+        const item = cart.find(i=>i.id === productId);
+        if(!item) return;
+        item.quantity += delta;
+        if(item.quantity <= 0){ cart = cart.filter(i=>i.id !== productId); showToast(`تمت إزالة ${item.اسم} من السلة`); }
+        updateCartDisplay();
+    }
+
+    // ======= Search =======
+    function setupSearch(){
+        const input = document.getElementById('search-input');
+        const btn = document.getElementById('search-btn');
+        const perform = ()=>{
+            const term = normalizeArabic(input.value);
+            if(!term) return renderProducts(products);
+            const filtered = products.filter(p=>{
+                return normalizeArabic(p.اسم).includes(term) || normalizeArabic(p.صنف).includes(term) || normalizeArabic(p.كلمات_مفتاحية).includes(term);
+            });
+            renderProducts(filtered);
+        };
+        input.addEventListener('input', perform);
+        btn.addEventListener('click', perform);
+    }
+
+    // ======= Location & Delivery calculation =======
+    function calculateDistance(lat1, lon1, lat2, lon2){
+        const R = 6371; const dLat = (lat2-lat1)*Math.PI/180; const dLon=(lon2-lon1)*Math.PI/180;
+        const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+        const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); return R*c;
+    }
+
+    function setupLocation(){
+        document.getElementById('get-location-btn').addEventListener('click', ()=>{
+            if(!navigator.geolocation){ alert('المتصفح لا يدعم تحديد الموقع.'); return; }
+            navigator.geolocation.getCurrentPosition(pos=>{
+                customerLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+                const km = calculateDistance(STORE_LAT, STORE_LON, customerLocation.lat, customerLocation.lon);
+                const BASE_FEE = 300; const FREE_DISTANCE = 5; const RATE_PER_KM = 50;
+                deliveryCost = Math.round(BASE_FEE + Math.max(0, km - FREE_DISTANCE) * RATE_PER_KM);
+                document.getElementById('location-status').textContent = `✅ تم تحديد الموقع. المسافة: ${km.toFixed(2)} كم.`;
+                updateCartDisplay();
+            }, err=>{
+                console.warn(err);
+                deliveryCost = 500;
+                document.getElementById('location-status').textContent = `⚠️ لم يتم تحديد الموقع. رسوم توصيل افتراضية ${formatPrice(deliveryCost)}`;
+                updateCartDisplay();
+            });
+        });
+    }
+
+    // ======= WhatsApp integration =======
+    function setupWhatsApp(){
+        document.getElementById('send-whatsapp-order').addEventListener('click', ()=>{
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            if(!name || !phone){ alert('يرجى إدخال الاسم ورقم الهاتف.'); return; }
+            if(!customerLocation){ alert('يرجى تحديد الموقع لحساب التوصيل.'); return; }
+            if(cart.length === 0){ alert('السلة فارغة. أضف منتجات.'); return; }
+
+            let orderDetails = '';
+            cart.forEach(item=>{ orderDetails += `- ${item.اسم} (${item.quantity} × ${formatPrice(item.سعر)}) = ${formatPrice(item.سعر * item.quantity)}
+`; });
+            const subTotal = cart.reduce((t,i)=>t + i.سعر*i.quantity,0);
+            const totalCost = subTotal + deliveryCost;
+
+            const message = `طلبية جديدة - متجر السلع الطازجة
+
+معلومات الزبون:
+- الاسم: ${name}
+- الهاتف: ${phone}
+
+تفاصيل الطلب:
+${orderDetails}
+المجموع الفرعي: ${formatPrice(subTotal)}
+تكلفة التوصيل: ${formatPrice(deliveryCost)}
+المجموع الكلي: ${formatPrice(totalCost)}
+
+موقع التوصيل: https://www.google.com/maps/search/?api=1&query=${customerLocation.lat},${customerLocation.lon}`;
+
+            const encoded = encodeURIComponent(message);
+            // TODO: ضع رقم المتجر هنا بصيغة دولية بدون +، مثال: 213XXXXXXXXX
+            const shopNumber = localStorage.getItem('shop_phone') || '213123456789';
+            const waUrl = `https://wa.me/${shopNumber}?text=${encoded}`;
+            window.open(waUrl, '_blank');
+        });
+    }
+
+    // ======= UI Handlers =======
+    function setupUI(){
+        const cartIcon = document.getElementById('cart-icon');
+        const overlay = document.getElementById('overlay');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const checkoutPanel = document.getElementById('checkout-form');
+        const closeCart = document.getElementById('close-cart');
+        const closeCheckout = document.getElementById('close-checkout');
+        const floating = document.getElementById('floating-cart');
+
+        function openPanel(panel){ overlay.style.display='block'; panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); }
+        function closePanel(panel){ panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); overlay.style.display='none'; }
+
+        cartIcon.addEventListener('click', ()=> openPanel(cartSidebar));
+        floating.addEventListener('click', ()=> openPanel(cartSidebar));
+        closeCart.addEventListener('click', ()=> closePanel(cartSidebar));
+        closeCheckout.addEventListener('click', ()=> closePanel(checkoutPanel));
+        overlay.addEventListener('click', ()=>{ closePanel(cartSidebar); closePanel(checkoutPanel); });
+
+        document.getElementById('checkout-button').addEventListener('click', ()=>{
+            if(cart.length === 0){ alert('السلة فارغة.'); return; }
+            closePanel(cartSidebar); openPanel(checkoutPanel);
+        });
+
+        document.getElementById('back-to-cart').addEventListener('click', ()=>{ closePanel(checkoutPanel); openPanel(cartSidebar); });
+    }
+
+    // ======= Admin panel =======
+    function setupAdmin(){
+        const input = document.getElementById('admin-api');
+        const saveBtn = document.getElementById('save-api');
+        const clearBtn = document.getElementById('clear-cache');
+        input.value = localStorage.getItem('admin_api_url') || '';
+        saveBtn.addEventListener('click', ()=>{
+            const v = input.value.trim(); if(!v){ alert('أدخل رابط API صالح.'); return; }
+            localStorage.setItem('admin_api_url', v); showToast('تم حفظ رابط الـ API'); fetchProducts(true);
+        });
+        clearBtn.addEventListener('click', ()=>{ localStorage.removeItem(CACHE_KEY); localStorage.removeItem(CACHE_TS_KEY); showToast('تم مسح الكاش'); fetchProducts(true); });
+    }
+
+    // ======= Initialization =======
+    document.addEventListener('DOMContentLoaded', ()=>{
+        setupAdmin(); setupUI(); setupSearch(); setupLocation(); setupWhatsApp();
+        // show floating cart on small screens
+        if(window.innerWidth <= 768) document.getElementById('floating-cart').style.display = 'block';
+        fetchProducts();
+    });
+
+    // ======= Accessibility / small helpers =======
+    window.addEventListener('resize', ()=>{ if(window.innerWidth <= 768) document.getElementById('floating-cart').style.display = 'block'; else document.getElementById('floating-cart').style.display = 'none'; });
+    </script>
+
+    <!--
+    ملاحظات نشر Google Apps Script (doGet):
+    - اجعل السكربت يعيد JSON من Google Sheets.
+    - تأكد من السماح بالوصول (Anyone, even anonymous) أو إعداد OAuth إذا لزم.
+    - مثال دالة doGet في Apps Script:
+
+    function doGet(e){
+      const ss = SpreadsheetApp.openById('SPREADSHEET_ID');
+      const sh = ss.getSheetByName('products');
+      const rows = sh.getDataRange().getValues();
+      const headers = rows.shift();
+      const out = rows.map(r=>{
+        const obj = {};
+        headers.forEach((h,i)=> obj[h] = r[i]);
+        return obj;
+      });
+      return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON).setHeader('Access-Control-Allow-Origin','*');
+    }
+
+    - تأكد أن أسماء الأعمدة في الشيت تتضمن: id, name, category, price, keywords, image
+    -->
+</body>
+</html>
