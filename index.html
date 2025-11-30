@@ -1,445 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر المواد الغذائية</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-    /* تنسيق أساسي للعربية والخطوط */
-body {
-    direction: rtl;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4CAF50; /* لون جذاب للأغذية */
-}
-
-/* تصميم شريط البحث */
-.search-bar {
-    display: flex;
-    width: 40%;
-}
-#search-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-    flex-grow: 1;
-}
-.search-bar button {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-}
-
-/* أيقونة السلة */
-.cart-icon {
-    font-size: 24px;
-    cursor: pointer;
-    position: relative;
-    padding: 5px;
-}
-#cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
-}
-
-/* تنسيق جسم الصفحة والأقسام */
-main {
-    padding: 20px 40px;
-}
-.category-section h2 {
-    color: #388e3c;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-    margin-top: 30px;
-}
-
-/* تنسيق عرض البطاقات (الشبكة) */
-.product-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-/* تصميم بطاقة المنتج (الميزة المطلوبة) */
-.product-card {
-    background-color: white;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    width: 250px;
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.2s;
-}
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-.product-card img {
-    width: 100%;
-    height: 150px;
-    object-fit: contain; /* لضمان ظهور المنتج كاملاً */
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-.product-info h3 {
-    margin: 5px 0;
-    font-size: 18px;
-    color: #000;
-}
-.price {
-    font-weight: bold;
-    color: #e64a19; /* لون السعر */
-    font-size: 1.1em;
-}
-.add-to-cart-btn {
-    background-color: #FF9800; /* زر شراء جذاب */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-.add-to-cart-btn:hover {
-    background-color: #f57c00;
-}
-
-/* سلة المشتريات وصفحة الدفع (مخفية في البداية) */
-.hidden {
-    display: none !important;
-}
-
-/* تنسيق الفوتر */
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: 50px;
-}
-.footer-links a {
-    color: #ccc;
-    text-decoration: none;
-    margin: 0 10px;
-}
-    </style>
-    
-</head>
-<body>
-
-    <header>
-        <div class="logo">متجر السلع الطازجة 🛒</div>
-        
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="ابحث عن المنتجات أو الأصناف...">
-            <button>بحث</button>
-        </div>
-        
-        <div class="cart-icon">
-            <span id="cart-count">0</span>
-            <span role="img" aria-label="سلة المشتريات">🧺</span>
-        </div>
-    </header>
-
-    <main>
-        <section class="category-section" id="oil-category">
-            <h2>زيت المائدة</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <img src="placeholder-oil-5l.jpg" alt="زيت 5 لتر">
-                    <div class="product-info">
-                        <h3>زيت عباد الشمس 5 لتر</h3>
-                        <p class="category-tag">الصنف: زيت المائدة</p>
-                        <p class="price">2500 دج</p>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="P001">➕ أضف إلى السلة</button>
-                </div>
-
-                <div class="product-card">
-                    <img src="placeholder-oil-2l.jpg" alt="زيت 2 لتر">
-                    <div class="product-info">
-                        <h3>زيت عباد الشمس 2 لتر</h3>
-                        <p class="category-tag">الصنف: زيت المائدة</p>
-                        <p class="price">1000 دج</p>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="P002">➕ أضف إلى السلة</button>
-                </div>
-                </div>
-        </section>
-
-        <hr>
-
-        <section class="category-section" id="canned-category">
-            <h2>المعلبات</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <img src="placeholder-tuna.jpg" alt="علبة تونة">
-                    <div class="product-info">
-                        <h3>علبة تونة بالزيت</h3>
-                        <p class="category-tag">الصنف: المعلبات</p>
-                        <p class="price">150 دج</p>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="P003">➕ أضف إلى السلة</button>
-                </div>
-            </div>
-        </section>
-        
-    </main>
-    
-    <div id="cart-sidebar" class="hidden">
-        <h3>سلة المشتريات</h3>
-        <ul id="cart-items">
-            <li>
-                زيت 5 لتر x 1
-                <div class="quantity-control">
-                    <button class="quantity-minus">-</button>
-                    <span class="current-quantity">1</span>
-                    <button class="quantity-plus">+</button>
-                </div>
-                <span>2500 دج</span>
-            </li>
-        </ul>
-
-        <div class="summary">
-            <p>المجموع الفرعي: <span id="sub-total">2500 دج</span></p>
-            <p>تكلفة التوصيل: <span id="delivery-cost">...</span></p>
-            <p class="total">المجموع الكلي: <span id="grand-total">...</span></p>
-        </div>
-        
-        <button id="checkout-button">إتمام عملية الشراء</button>
-    </div>
-
-    <div id="checkout-form" class="hidden">
-        <h3>بيانات التوصيل</h3>
-        <input type="text" id="customer-name" placeholder="الاسم الكامل" required>
-        <input type="tel" id="customer-phone" placeholder="رقم الهاتف" required>
-        
-        <button id="get-location-btn">📍 تحديد موقعي الجغرافي (للتوصيل)</button>
-        <p id="location-status" style="color: green; margin-top: 10px;"></p>
-
-        <p class="total">المجموع الكلي مع التوصيل: <span id="final-total">...</span></p>
-
-        <button id="send-whatsapp-order">إرسال الطلبية عبر واتساب</button>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 متجر السلع الطازجة. جميع الحقوق محفوظة.</p>
-        <div class="footer-links">
-            <a href="#">سياسة الخصوصية</a> | 
-            <a href="#">شروط الاستخدام</a>
-        </div>
-        <div class="social-media">
-            </div>
-    </footer>
-    <script>
-    
-    // A. إعداد المتغيرات الرئيسية
-let cart = []; // سلة المشتريات فارغة في البداية
-const STORE_LAT = 36.7538; // إحداثيات المتجر الثابتة
-const STORE_LON = 3.0588;
-
-// B. دالة جلب المنتجات من Google Sheets
-async function fetchProducts() {
-    // 1. **الربط بالورقة:** (يتم هنا استخدام Google Sheets API أو Google Apps Script)
-    //    const response = await fetch('YOUR_GOOGLE_SHEET_API_URL');
-    //    const productsData = await response.json();
-    
-    // 2. **مثال على البيانات (للتجريب):**
-    const productsData = [
-        { id: 'P001', صنف: 'زيت المائدة', اسم: 'زيت عباد الشمس 5 ل', سعر: 2500, كلمات_مفتاحية: 'زيت، طبخ', صورة: 'oil-5l.jpg' },
-        { id: 'P002', صنف: 'زيت المائدة', اسم: 'زيت عباد الشمس 2 ل', سعر: 1000, كلمات_مفتاحية: 'زيت، طبخ', صورة: 'oil-2l.jpg' },
-        { id: 'P003', صنف: 'المعلبات', اسم: 'علبة تونة بالزيت', سعر: 150, كلمات_مفتاحية: 'تونة، سمك', صورة: 'tuna.jpg' },
-        // ... بيانات أخرى من ورقة جوجل شيت ...
-    ];
-
-    renderProducts(productsData);
-}
-
-// C. دالة عرض المنتجات في الواجهة
-function renderProducts(products) {
-    // 1. **تجميع المنتجات حسب الصنف:** //    يتم إنشاء كائن (Object) حيث يكون المفتاح هو الصنف والقيمة هي قائمة المنتجات التابعة له.
-    
-    // 2. **توليد HTML:** يتم إنشاء أقسام <section class="category-section">
-    //    وبداخلها يتم توليد <div class="product-card"> لكل منتج بشكل ديناميكي.
-    
-    // 3. **إضافة مستمع الحدث (Event Listener):** //    لكل زر "أضف إلى السلة" يتم ربطه بالدالة: handleAddToCart(product.id);
-}
-
-// استدعاء الدالة عند تحميل الصفحة
-fetchProducts();
-    
-    // A. دالة إضافة المنتج إلى السلة
-function handleAddToCart(productId) {
-    // 1. البحث عن المنتج في قائمة المنتجات المتاحة.
-    // 2. فحص: هل المنتج موجود بالفعل في مصفوفة 'cart'؟
-    if (cart.find(item => item.id === productId)) {
-        // إذا كان موجوداً: زيادة الكمية (+1).
-        // item.quantity++;
-    } else {
-        // إذا لم يكن موجوداً: إضافته إلى مصفوفة 'cart' بالكمية (1).
-        // cart.push({ id: productId, quantity: 1, ...otherDetails });
-    }
-    
-    updateCartDisplay();
-}
-
-// B. دالة تحديث عرض السلة والمجموع الكلي
-function updateCartDisplay() {
-    // 1. تحديث عداد السلة في الهيدر: cart-count.innerHTML = cart.length;
-    
-    // 2. حساب المجموع الفرعي (Sub-total):
-    //    let subTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    //    subTotalElement.innerHTML = subTotal + ' دج';
-
-    // 3. تحديث قائمة المنتجات داخل السلة (cart-sidebar)
-    //    يتم توليد عناصر <li> جديدة لكل منتج في 'cart' مع أزرار (+) و (-).
-    
-    // 4. ربط الأزرار الديناميكية:
-    //    لكل زر (+) و (-)، يتم ربطه بدالة مثل: handleQuantityChange(itemId, delta);
-}
-    
-    const searchInput = document.getElementById('search-input');
-
-searchInput.addEventListener('input', function() {
-    const searchTerm = searchInput.value.toLowerCase();
-    
-    // 1. **فلترة المنتجات:**
-    //    يتم فلترة قائمة المنتجات الأصلية (التي تم جلبها من Google Sheets).
-    
-    // 2. **معيار البحث:** يجب أن يتطابق 'searchTerm' مع:
-    //    - اسم_المنتج.
-    //    - الصنف_الرئيسي.
-    //    - أي من الكلمات_المفتاحية.
-    
-    // 3. **إعادة العرض:**
-    //    renderProducts(filteredProducts); // إعادة عرض فقط المنتجات المطابقة.
-});
-    
-    const getLocationBtn = document.getElementById('get-location-btn');
-let customerLocation = null; // لتخزين إحداثيات العميل
-let deliveryCost = 0;
-
-getLocationBtn.addEventListener('click', () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const customerLat = position.coords.latitude;
-                const customerLon = position.coords.longitude;
-                customerLocation = { lat: customerLat, lon: customerLon };
-
-                // A. حساب المسافة (يتطلب Google Maps API Key)
-                // يتم استدعاء دالة تحسب المسافة بين (STORE_LAT, STORE_LON) و (customerLat, customerLon)
-                const distanceKm = await calculateDistance(STORE_LAT, STORE_LON, customerLat, customerLon);
-                
-                // B. تطبيق معادلة التسعير (كما اتفقنا)
-                const BASE_FEE = 300; // دج
-                const FREE_DISTANCE = 5; // كم
-                const RATE_PER_KM = 50; // دج
-                
-                deliveryCost = BASE_FEE + Math.max(0, distanceKm - FREE_DISTANCE) * RATE_PER_KM;
-                
-                // C. تحديث الواجهة
-                document.getElementById('location-status').innerText = `✅ تم تحديد الموقع. المسافة: ${distanceKm.toFixed(2)} كم.`;
-                updateFinalTotal();
-            },
-            (error) => {
-                // رسالة خطأ إذا رفض المستخدم مشاركة موقعه
-                alert("يرجى تفعيل الموقع الجغرافي لحساب تكلفة التوصيل.");
-                deliveryCost = 500; // رسوم توصيل افتراضية في حالة الرفض
-                updateFinalTotal();
-            }
-        );
-    } else {
-        alert("متصفحك لا يدعم تحديد الموقع الجغرافي.");
-    }
-});
-
-function updateFinalTotal() {
-    // 1. يتم جمع المجموع الفرعي + deliveryCost
-    // 2. تحديث العناصر: id="final-total" و id="delivery-cost"
-}
-    
-    const sendWhatsappBtn = document.getElementById('send-whatsapp-order');
-
-sendWhatsappBtn.addEventListener('click', () => {
-    const customerName = document.getElementById('customer-name').value;
-    const customerPhone = document.getElementById('customer-phone').value;
-    
-    if (!customerName || !customerPhone || !customerLocation) {
-        alert("يرجى إدخال الاسم ورقم الهاتف وتحديد الموقع الجغرافي.");
-        return;
-    }
-    
-    // 1. بناء نص الطلبية (بالاستفادة من البيانات في مصفوفة 'cart')
-    let orderDetails = cart.map(item => `${item.اسم} x ${item.quantity} (${item.price * item.quantity} دج)`).join('\n');
-
-    const totalCost = parseFloat(document.getElementById('grand-total').innerText); // سحب المبلغ النهائي
-
-    // 2. بناء رسالة الواتساب النهائية
-    const message = `
-*طلبية جديدة للمواد الغذائية:*
-----------------------------------
-*الزبون:* ${customerName}
-*الهاتف:* ${customerPhone}
-
-*تفاصيل الطلب:*
-${orderDetails}
-
-----------------------------------
-*المجموع الكلي:* ${totalCost} دج
-*تكلفة التوصيل:* ${deliveryCost} دج
-*المجموع الفرعي:* ${totalCost - deliveryCost} دج
-
-----------------------------------
-*موقع التوصيل:*
-https://www.google.com/maps/search/?api=1&query=${customerLocation.lat},${customerLocation.lon}
-    `;
-
-    // 3. تشفير الرسالة لـ URL
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappURL = `https://wa.me/2135XXXXXXX?text=${encodedMessage}`; // استبدل XXXXXXX برقمك
-    
-    // 4. إعادة توجيه المستخدم
-    window.open(whatsappURL, '_blank');
-});
-    
-    
-    
-    </script>
-</body>
-
-</html>
